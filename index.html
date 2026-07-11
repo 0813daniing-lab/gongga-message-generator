@@ -170,9 +170,10 @@
               <label for="absenceDate">출결 예정 날짜</label>
               <input id="absenceDate" type="date" />
             </div>
-            <div class="field">
-              <label for="attendanceDays">예정 일수</label>
-              <input id="attendanceDays" type="number" min="1" max="99" value="1" />
+            <div class="field" id="returnDateField">
+              <label for="returnDate">복귀 예정 날짜</label>
+              <input id="returnDate" type="date" />
+              <div class="hint">결석 후 다시 출석하는 날짜를 선택해주세요.</div>
             </div>
           </div>
 
@@ -272,8 +273,6 @@ const reasons = {
     ],
     template: ({name, deadline}) =>
 `${name}님, 예비군 또는 민방위 훈련은 공가 처리가 가능합니다. 다만 소집통지서가 아니라 실제 훈련에 참여했다는 훈련필증 또는 교육필증을 제출해주셔야 합니다.
-
-가장 중요한 점은 훈련이 여러 날인 경우 모든 훈련일을 하루 단위로 각각 신청해야 한다는 것입니다. 일정이 끝난 뒤 한 번에 올리면 일부 날짜가 인정되지 않을 수 있으니, 훈련 당일마다 필증을 받아 바로 신청해주세요.
 
 서류는 ${deadline} 제출해야 하며, 필증에 해당 훈련 날짜와 발급 확인 정보가 보이도록 확인 부탁드립니다.`
   },
@@ -464,6 +463,7 @@ function renderAttendance(){
     btn.addEventListener("click", () => {
       selectedAttendance = btn.dataset.key;
       renderAttendance();
+      updateReturnDateField();
     });
   });
 }
@@ -507,6 +507,66 @@ function getNames(){
 }
 
 
+
+function parseDateValue(value){
+  if(!value) return null;
+  const [year, month, day] = value.split("-").map(Number);
+  return new Date(year, month - 1, day);
+}
+
+function getDateDifference(startValue, endValue){
+  if(!startValue || !endValue) return 1;
+  const [sy, sm, sd] = startValue.split("-").map(Number);
+  const [ey, em, ed] = endValue.split("-").map(Number);
+  const startUtc = Date.UTC(sy, sm - 1, sd);
+  const endUtc = Date.UTC(ey, em - 1, ed);
+  return Math.max(1, Math.round((endUtc - startUtc) / 86400000));
+}
+
+function getScheduleInfo(){
+  const startValue = document.getElementById("absenceDate").value;
+  const returnValue = document.getElementById("returnDate").value;
+  const isAbsence = selectedAttendance === "absence";
+  const days = isAbsence ? getDateDifference(startValue, returnValue) : 1;
+
+  return {
+    startValue,
+    returnValue: isAbsence ? returnValue : "",
+    startLabel: formatDate(startValue),
+    returnLabel: isAbsence ? formatDate(returnValue) : "",
+    days
+  };
+}
+
+function updateReturnDateField(){
+  const field = document.getElementById("returnDateField");
+  const returnInput = document.getElementById("returnDate");
+  const startValue = document.getElementById("absenceDate").value;
+
+  if(selectedAttendance === "absence"){
+    field.style.display = "";
+    if(startValue){
+      const start = parseDateValue(startValue);
+      const nextDay = new Date(start);
+      nextDay.setDate(nextDay.getDate() + 1);
+      const nextValue = [
+        nextDay.getFullYear(),
+        String(nextDay.getMonth() + 1).padStart(2, "0"),
+        String(nextDay.getDate()).padStart(2, "0")
+      ].join("-");
+
+      returnInput.min = nextValue;
+      if(!returnInput.value || returnInput.value < nextValue){
+        returnInput.value = nextValue;
+      }
+    }else{
+      returnInput.min = "";
+    }
+  }else{
+    field.style.display = "none";
+  }
+}
+
 function getDatePhrase(){
   const value = document.getElementById("absenceDate").value;
   if(!value) return "";
@@ -524,7 +584,8 @@ function getDatePhrase(){
 function getEmpathyLine(name){
   const when = getDatePhrase();
   const dateText = when ? `${when} ` : "";
-  const days = Math.max(1, Number(document.getElementById("attendanceDays").value) || 1);
+  const schedule = getScheduleInfo();
+  const days = schedule.days;
   const attendanceLabel = attendanceTypes[selectedAttendance];
   const reasonPhrase = reasonPhrases[selectedReason] || reasons[selectedReason].label;
 
@@ -532,13 +593,19 @@ function getEmpathyLine(name){
     const durationPhrase = selectedAttendance !== "absence" && days === 1
       ? ""
       : `${days}일 `;
-    return `네, ${name}님. ${dateText}개인 일정으로 ${durationPhrase}${attendanceLabel} 예정이시군요!`;
+    const returnPhrase = selectedAttendance === "absence" && schedule.returnLabel
+      ? ` 후 ${schedule.returnLabel} 복귀`
+      : "";
+    return `네, ${name}님. ${dateText}개인 일정으로 ${durationPhrase}${attendanceLabel}${returnPhrase} 예정이시군요!`;
   }
 
   const durationPhrase = selectedAttendance !== "absence" && days === 1
     ? ""
     : `${days}일 `;
-  const schedulePhrase = `${reasonPhrase}로 ${durationPhrase}${attendanceLabel} 예정이시군요!`;
+  const returnPhrase = selectedAttendance === "absence" && schedule.returnLabel
+    ? ` 후 ${schedule.returnLabel} 복귀`
+    : "";
+  const schedulePhrase = `${reasonPhrase}로 ${durationPhrase}${attendanceLabel}${returnPhrase} 예정이시군요!`;
 
   const endings = {
     medical: "몸이 좋지 않으시다면 무리하지 마시고 진료 잘 받고 오세요.",
@@ -556,6 +623,22 @@ function getEmpathyLine(name){
   return `네, ${name}님. ${dateText}${schedulePhrase} ${endings[selectedReason] || ""}`.trim();
 }
 
+
+
+function getMultiDayAbsenceNote(){
+  const schedule = getScheduleInfo();
+  const dailyApplicationReasons = ["medical", "reserve", "interview", "exam", "contest"];
+
+  if(
+    selectedAttendance !== "absence" ||
+    schedule.days <= 1 ||
+    !dailyApplicationReasons.includes(selectedReason)
+  ){
+    return "";
+  }
+
+  return `가장 중요한 점은 결석이 여러 날인 경우 모든 결석일을 하루 단위로 각각 공가를 신청해야 한다는 것입니다. 일정이 끝난 뒤 한 번에 올리면 일부 날짜가 인정되지 않을 수 있으니, 결석 당일마다 증빙서류를 받아 바로 신청해주세요.`;
+}
 
 function getAdvanceApplicationNote(){
   const common = `당일 바로 증빙서류까지 준비하기 어려우시다면, 신청 기한이 지나지 않도록 우선 공가 신청을 먼저 등록한 뒤 추후 서류를 보강하는 방식으로라도 누락 없이 처리해주세요.`;
@@ -614,8 +697,10 @@ function buildMessage(name){
   const deadline = document.getElementById("deadline").value.trim() || "결석일 기준 다음 날 오후 4시 전까지";
   const guide = document.getElementById("guideLink").value.trim();
   const apply = document.getElementById("applyLink").value.trim();
-  const date = formatDate(document.getElementById("absenceDate").value);
-  const attendanceDays = Math.max(1, Number(document.getElementById("attendanceDays").value) || 1);
+  const schedule = getScheduleInfo();
+  const date = schedule.startLabel;
+  const returnDate = schedule.returnLabel;
+  const attendanceDays = schedule.days;
   const includeEmpathy = document.getElementById("includeEmpathy").checked;
   const includeTeam = document.getElementById("includeTeam").checked;
   const includeAdmin = document.getElementById("includeAdmin").checked;
@@ -653,19 +738,25 @@ function buildMessage(name){
     }
   }
   if(date || attendanceDays){
-    let context = [];
-    if(date){
-      if(attendanceDays > 1){
-        context.push(`일정은 ${date}부터`);
-      }else{
-        context.push(`일정은 ${date}`);
-      }
-    }
     const attendanceDuration = selectedAttendance !== "absence" && attendanceDays === 1
       ? `${attendanceTypes[selectedAttendance]} 예정`
       : `${attendanceDays}일 ${attendanceTypes[selectedAttendance]} 예정`;
-    context.push(attendanceDuration);
-    parts.push(context.join(", ") + "으로 확인했습니다.");
+
+    if(selectedAttendance === "absence" && returnDate){
+      const startPhrase = attendanceDays > 1 && date
+        ? `${date}부터 ${attendanceDuration}`
+        : date
+          ? `${date}, ${attendanceDuration}`
+          : attendanceDuration;
+      parts.push(`일정은 ${startPhrase}이며, ${returnDate} 복귀 예정으로 확인했습니다.`);
+    }else{
+      const startPhrase = attendanceDays > 1 && date
+        ? `${date}부터 ${attendanceDuration}`
+        : date
+          ? `${date}, ${attendanceDuration}`
+          : attendanceDuration;
+      parts.push(`일정은 ${startPhrase}으로 확인했습니다.`);
+    }
   }
 
   const halfAttendanceLimitNote = getHalfAttendanceLimitNote();
@@ -675,6 +766,9 @@ function buildMessage(name){
   if(attendanceActionNote) parts.push(attendanceActionNote);
 
   parts.push(reasons[selectedReason].template({name, deadline}));
+
+  const multiDayAbsenceNote = getMultiDayAbsenceNote();
+  if(multiDayAbsenceNote) parts.push(multiDayAbsenceNote);
 
   const advanceApplicationNote = getAdvanceApplicationNote();
   if(advanceApplicationNote) parts.push(advanceApplicationNote);
@@ -710,8 +804,10 @@ function getManagerGuideSummary(){
 }
 
 function buildManagerReport(name){
-  const date = formatDate(document.getElementById("absenceDate").value);
-  const attendanceDays = Math.max(1, Number(document.getElementById("attendanceDays").value) || 1);
+  const schedule = getScheduleInfo();
+  const date = schedule.startLabel;
+  const returnDate = schedule.returnLabel;
+  const attendanceDays = schedule.days;
   const attendanceLabel = attendanceTypes[selectedAttendance];
   const reasonLabel = selectedReason === "notAllowed"
     ? "개인 사정"
@@ -736,6 +832,10 @@ function buildManagerReport(name){
     }
   }
 
+  if(selectedAttendance === "absence" && returnDate){
+    scheduleText += `, ${returnDate} 복귀 예정`;
+  }
+
   let guidanceText = "";
   if(selectedWeek === "selfStudy"){
     guidanceText = `현재 자율학습 주간으로, 팀원분들께 일정만 간단히 언질하도록 안내 완료.`;
@@ -746,6 +846,10 @@ function buildManagerReport(name){
   const guideSummary = getManagerGuideSummary();
   if(guideSummary){
     guidanceText += ` ${guideSummary}`;
+  }
+
+  if(getMultiDayAbsenceNote()){
+    guidanceText += ` 여러 날 결석 시 결석일별로 공가를 각각 신청해야 하는 기준도 안내 완료.`;
   }
 
   if(selectedAttendance === "late"){
@@ -771,6 +875,18 @@ function escapeHtml(str){
 
 function generate(){
   const names = getNames();
+  const schedule = getScheduleInfo();
+
+  if(selectedAttendance === "absence" && schedule.startValue && schedule.returnValue){
+    const start = parseDateValue(schedule.startValue);
+    const end = parseDateValue(schedule.returnValue);
+    if(end <= start){
+      showToast("복귀 날짜는 출결 예정 날짜 다음 날 이후로 선택해주세요.");
+      document.getElementById("returnDate").focus();
+      return;
+    }
+  }
+
   if(!names.length){
     showToast("수강생 이름을 입력해주세요.");
     document.getElementById("names").focus();
@@ -847,6 +963,11 @@ document.getElementById("downloadTxt").addEventListener("click",()=>{
   URL.revokeObjectURL(url);
 });
 
+
+document.getElementById("absenceDate").addEventListener("change",()=>{
+  updateReturnDateField();
+});
+
 document.getElementById("saveSettings").addEventListener("click",()=>{
   const data={
     guideLink:document.getElementById("guideLink").value,
@@ -860,13 +981,14 @@ document.getElementById("saveSettings").addEventListener("click",()=>{
 document.getElementById("reset").addEventListener("click",()=>{
   document.getElementById("names").value="";
   document.getElementById("absenceDate").value="";
-  document.getElementById("attendanceDays").value="1";
+  document.getElementById("returnDate").value="";
   document.getElementById("includeEmpathy").checked=true;
   document.getElementById("includeTeam").checked=true;
   document.getElementById("includeAdmin").checked=true;
   selectedAttendance="absence";
   selectedWeek="selfStudy";
   renderAttendance();
+  updateReturnDateField();
   renderWeekTypes();
   resultBody.innerHTML='<div class="empty">사유와 이름을 입력한 뒤 문구를 생성해주세요.</div>';
   managerResultBody.innerHTML='<div class="empty">문구를 생성하면 매니저 방에 공유할 보고 문구도 함께 만들어집니다.</div>';
@@ -879,6 +1001,7 @@ document.getElementById("reset").addEventListener("click",()=>{
   if(saved.deadline) document.getElementById("deadline").value=saved.deadline;
   renderReasons();
   renderAttendance();
+  updateReturnDateField();
   renderWeekTypes();
   renderRule();
 })();
