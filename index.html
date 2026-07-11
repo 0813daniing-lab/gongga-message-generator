@@ -3,6 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2280%22>📄</text></svg>" />
   <title>공가 안내 문구 생성기</title>
   <style>
     :root{
@@ -892,7 +893,6 @@ const GOOGLE_COUNTER_URL = "https://script.google.com/macros/s/AKfycbzzwkg0vpoFI
 function isUsageCounterConfigured(){
   return Boolean(
     GOOGLE_COUNTER_URL &&
-    !GOOGLE_COUNTER_URL.includes("https://script.google.com/macros/s/AKfycbzzwkg0vpoFIDmm6L2YkMRht2RsFDIiJPGao3Pu9bCSRagAOxPeAey0vEW2mQAY0z1C/exec") &&
     /^https:\/\/script\.google\.com\/macros\/s\/.+\/exec(?:\?.*)?$/.test(GOOGLE_COUNTER_URL)
   );
 }
