@@ -39,10 +39,18 @@
     }
     h1{font-size:30px;line-height:1.2;margin:0}
     .desc{margin:8px 0 0;color:var(--sub);font-size:15px}
+    .top-actions{display:flex;align-items:center;justify-content:flex-end;gap:9px;flex-wrap:wrap}
     .badge{
       display:inline-flex;align-items:center;gap:7px;padding:9px 12px;border:1px solid #cfe0ff;
       background:var(--primary-soft);color:#285ccf;border-radius:999px;font-size:13px;font-weight:700;white-space:nowrap
     }
+    .report-link{
+      display:inline-flex;align-items:center;justify-content:center;padding:9px 12px;border:1px solid #ef9a9a;
+      background:#fff1f1;color:#c62828;border-radius:999px;font-size:13px;font-weight:800;white-space:nowrap;
+      text-decoration:none;box-shadow:0 4px 12px rgba(198,40,40,.08);transition:.15s
+    }
+    .report-link:hover{border-color:#d32f2f;background:#ffe3e3;color:#b71c1c;transform:translateY(-1px)}
+    .report-link:focus-visible{outline:3px solid rgba(211,47,47,.2);outline-offset:2px}
     .grid{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(360px,.8fr);gap:20px}
     .panel{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
     .panel-head{padding:22px 24px 0;display:flex;align-items:center;justify-content:space-between;gap:12px}
@@ -120,7 +128,7 @@
     @media (max-width:900px){
       .grid{grid-template-columns:1fr}
       .top{flex-direction:column}
-      .badge{align-self:flex-start}
+      .top-actions{justify-content:flex-start}
     }
     @media (max-width:620px){
       .wrap{padding:24px 14px 50px}
@@ -145,7 +153,12 @@
         </div>
         <p class="desc">사유를 선택하고 이름만 입력하면, 제출 서류와 주의사항이 포함된 안내 문구를 바로 복사할 수 있습니다.</p>
       </div>
-      <div class="badge" id="usageBadge">누적 0회 사용</div>
+      <div class="top-actions">
+        <div class="badge" id="usageBadge">누적 집계 중</div>
+        <a class="report-link" href="https://docs.google.com/forms/d/e/1FAIpQLSek9vMP-yh-hLQ7PJasaO4DDLLnl7oj1owXTMr9WFOjEK7GCw/viewform?usp=publish-editor" target="_blank" rel="noopener noreferrer" aria-label="오류 제보 구글폼 새 창으로 열기">
+          오류 제보
+        </a>
+      </div>
     </header>
 
     <main class="grid">
@@ -874,20 +887,113 @@ function escapeHtml(str){
 }
 
 
-function getLocalUsageCount(){
-  const value = Number(localStorage.getItem("gonggaUsageCount"));
-  return Number.isFinite(value) && value >= 0 ? value : 0;
+const GOOGLE_COUNTER_URL = "https://script.google.com/macros/s/AKfycbz2wjZjQVElYhF8Qv_4OJFAt34MjheoSSipHFPQfA2XE2wfIZPnQPWFYY1l_5kFwwu6/exec";
+
+function isUsageCounterConfigured(){
+  return Boolean(
+    GOOGLE_COUNTER_URL &&
+    !GOOGLE_COUNTER_URL.includes("https://script.google.com/macros/s/AKfycbz2wjZjQVElYhF8Qv_4OJFAt34MjheoSSipHFPQfA2XE2wfIZPnQPWFYY1l_5kFwwu6/exec") &&
+    /^https:\/\/script\.google\.com\/macros\/s\/.+\/exec(?:\?.*)?$/.test(GOOGLE_COUNTER_URL)
+  );
 }
 
-function renderLocalUsageCount(){
-  const count = getLocalUsageCount();
-  document.getElementById("usageBadge").textContent = `누적 ${count.toLocaleString("ko-KR")}회 사용`;
+function setUsageBadge(value, error = false){
+  const badge = document.getElementById("usageBadge");
+
+  if(typeof value === "number" && Number.isFinite(value)){
+    badge.textContent = `누적 ${value.toLocaleString("ko-KR")}회 사용`;
+    badge.title = "모든 사용자가 문구를 생성한 전체 누적 횟수입니다.";
+    localStorage.setItem("gonggaLastGlobalUsageCount", String(value));
+  }else{
+    badge.textContent = String(value);
+    badge.title = error ? "전체 누적 횟수를 불러오지 못했습니다." : "";
+  }
 }
 
-function incrementLocalUsageCount(){
-  const next = getLocalUsageCount() + 1;
-  localStorage.setItem("gonggaUsageCount", String(next));
-  renderLocalUsageCount();
+function requestGoogleCounter(action){
+  return new Promise((resolve, reject) => {
+    if(!isUsageCounterConfigured()){
+      reject(new Error("usage_counter_not_configured"));
+      return;
+    }
+
+    const callbackName = `gonggaCounterCallback_${Date.now()}_${Math.random().toString(36).slice(2)}`;
+    const script = document.createElement("script");
+    let completed = false;
+
+    const cleanup = () => {
+      if(completed) return;
+      completed = true;
+      delete window[callbackName];
+      script.remove();
+      clearTimeout(timer);
+    };
+
+    window[callbackName] = payload => {
+      cleanup();
+
+      if(payload && payload.ok && Number.isFinite(Number(payload.count))){
+        resolve(Number(payload.count));
+      }else{
+        reject(new Error(payload?.error || "counter_response_error"));
+      }
+    };
+
+    const separator = GOOGLE_COUNTER_URL.includes("?") ? "&" : "?";
+    script.src =
+      `${GOOGLE_COUNTER_URL}${separator}` +
+      `action=${encodeURIComponent(action)}` +
+      `&prefix=${encodeURIComponent(callbackName)}` +
+      `&_=${Date.now()}`;
+
+    script.async = true;
+    script.onerror = () => {
+      cleanup();
+      reject(new Error("counter_script_load_error"));
+    };
+
+    const timer = setTimeout(() => {
+      cleanup();
+      reject(new Error("counter_timeout"));
+    }, 10000);
+
+    document.head.appendChild(script);
+  });
+}
+
+async function loadGlobalUsageCount(){
+  const cached = Number(localStorage.getItem("gonggaLastGlobalUsageCount"));
+
+  if(Number.isFinite(cached) && cached >= 0){
+    setUsageBadge(cached);
+  }
+
+  if(!isUsageCounterConfigured()){
+    setUsageBadge("누적 집계 연결 필요", true);
+    return;
+  }
+
+  try{
+    const count = await requestGoogleCounter("get");
+    setUsageBadge(count);
+  }catch(error){
+    console.warn("전체 누적 횟수 조회 실패", error);
+
+    if(!(Number.isFinite(cached) && cached >= 0)){
+      setUsageBadge("누적 집계 오류", true);
+    }
+  }
+}
+
+async function incrementGlobalUsageCount(){
+  if(!isUsageCounterConfigured()) return;
+
+  try{
+    const count = await requestGoogleCounter("increment");
+    setUsageBadge(count);
+  }catch(error){
+    console.warn("전체 누적 횟수 증가 실패", error);
+  }
 }
 
 function generate(){
@@ -934,7 +1040,7 @@ function generate(){
     btn.addEventListener("click",()=>copyText(buildManagerReport(names[i])));
   });
 
-  incrementLocalUsageCount();
+  incrementGlobalUsageCount();
 }
 
 async function copyText(text){
@@ -1023,7 +1129,7 @@ document.getElementById("reset").addEventListener("click",()=>{
   updateReturnDateField();
   renderWeekTypes();
   renderRule();
-  renderLocalUsageCount();
+  loadGlobalUsageCount();
 })();
 </script>
 </body>
