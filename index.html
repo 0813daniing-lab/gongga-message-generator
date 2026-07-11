@@ -887,12 +887,12 @@ function escapeHtml(str){
 }
 
 
-const GOOGLE_COUNTER_URL = "https://script.google.com/macros/s/AKfycbz2wjZjQVElYhF8Qv_4OJFAt34MjheoSSipHFPQfA2XE2wfIZPnQPWFYY1l_5kFwwu6/exec";
+const GOOGLE_COUNTER_URL = "https://script.google.com/macros/s/AKfycbzzwkg0vpoFIDmm6L2YkMRht2RsFDIiJPGao3Pu9bCSRagAOxPeAey0vEW2mQAY0z1C/exec";
 
 function isUsageCounterConfigured(){
   return Boolean(
     GOOGLE_COUNTER_URL &&
-    !GOOGLE_COUNTER_URL.includes("https://script.google.com/macros/s/AKfycbz2wjZjQVElYhF8Qv_4OJFAt34MjheoSSipHFPQfA2XE2wfIZPnQPWFYY1l_5kFwwu6/exec") &&
+    !GOOGLE_COUNTER_URL.includes("https://script.google.com/macros/s/AKfycbzzwkg0vpoFIDmm6L2YkMRht2RsFDIiJPGao3Pu9bCSRagAOxPeAey0vEW2mQAY0z1C/exec") &&
     /^https:\/\/script\.google\.com\/macros\/s\/.+\/exec(?:\?.*)?$/.test(GOOGLE_COUNTER_URL)
   );
 }
