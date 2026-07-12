@@ -145,6 +145,71 @@
     }
   
 </style>
+<!-- POSTHOG ANALYTICS START -->
+<script>
+!(function (t, e) {
+  var o, n, p, r;
+  e.__SV ||
+    ((window.posthog = e),
+    (e._i = []),
+    (e.init = function (i, s, a) {
+      function g(t, e) {
+        var o = e.split(".");
+        (2 == o.length && ((t = t[o[0]]), (e = o[1])),
+          (t[e] = function () {
+            t.push([e].concat(Array.prototype.slice.call(arguments, 0)));
+          }));
+      }
+      (((p = t.createElement("script")).type = "text/javascript"),
+        (p.crossOrigin = "anonymous"),
+        (p.async = !0),
+        (p.src =
+          s.api_host.replace(".i.posthog.com", "-assets.i.posthog.com") +
+          "/static/array.js"),
+        (r = t.getElementsByTagName("script")[0]).parentNode.insertBefore(p, r));
+      var u = e;
+      for (
+        void 0 !== a ? (u = e[a] = []) : (a = "posthog"),
+          u.people = u.people || [],
+          u.toString = function (t) {
+            var e = "posthog";
+            return ("posthog" !== a && (e += "." + a), t || (e += " (stub)"), e);
+          },
+          u.people.toString = function () {
+            return u.toString(1) + ".people (stub)";
+          },
+          o =
+            "init capture register register_once unregister get_distinct_id reset opt_in_capturing opt_out_capturing has_opted_out_capturing".split(
+              " "
+            ),
+          n = 0;
+        n < o.length;
+        n++
+      )
+        g(u, o[n]);
+      e._i.push([i, s, a]);
+    }),
+    (e.__SV = 1));
+})(document, window.posthog || []);
+
+posthog.init("phc_n3YGemtqM4PuwPxJuNkYC2rYiKRJSCtd9u7vpyvWxHhK", {
+  api_host: "https://us.i.posthog.com",
+  defaults: "2026-05-30",
+  autocapture: false,
+  capture_pageview: false,
+  capture_pageleave: false,
+  capture_dead_clicks: false,
+  disable_session_recording: true,
+  enable_heatmaps: false,
+  disable_surveys: true,
+  advanced_disable_flags: true,
+  person_profiles: "identified_only",
+  persistence: "sessionStorage",
+  mask_all_text: true,
+  mask_all_element_attributes: true
+});
+</script>
+<!-- POSTHOG ANALYTICS END -->
 </head>
 <body>
   <div class="wrap">
@@ -1074,5 +1139,358 @@ document.getElementById("reset").addEventListener("click",()=>{
   
 })();
 </script>
+<!-- GONGGA CUSTOM ANALYTICS START -->
+<script>
+(() => {
+  const ANALYTICS_VERSION = "gongga-posthog-v1";
+  const CASE_STATE_KEY = "gongga_analytics_case_state_v1";
+  const SESSION_SALT_KEY = "gongga_analytics_session_salt_v1";
+  const FINAL_FIELDS = [
+    "reason",
+    "attendance",
+    "week",
+    "days_bucket",
+    "has_start_date",
+    "has_return_date",
+    "include_empathy",
+    "include_team",
+    "include_admin119",
+    "guide_link_present",
+    "apply_link_present"
+  ];
+
+  function capture(eventName, properties = {}) {
+    if (!window.posthog || typeof window.posthog.capture !== "function") return;
+
+    window.posthog.capture(eventName, {
+      analytics_version: ANALYTICS_VERSION,
+      app_name: "gongga-message-generator",
+      ...properties
+    });
+  }
+
+  function getValue(id) {
+    return document.getElementById(id)?.value || "";
+  }
+
+  function getChecked(id) {
+    return Boolean(document.getElementById(id)?.checked);
+  }
+
+  function getActiveKey(selector) {
+    return document.querySelector(`${selector}.active`)?.dataset.key || "unknown";
+  }
+
+  function getNames() {
+    return getValue("names")
+      .split(/\n|,/)
+      .map(value => value.trim())
+      .filter(Boolean);
+  }
+
+  function parseDate(value) {
+    if (!value) return null;
+    const parts = value.split("-").map(Number);
+    if (parts.length !== 3 || parts.some(Number.isNaN)) return null;
+    return new Date(parts[0], parts[1] - 1, parts[2]);
+  }
+
+  function getDays() {
+    const attendance = getActiveKey(".attendance-btn");
+    if (attendance !== "absence") return 1;
+
+    const start = parseDate(getValue("absenceDate"));
+    const end = parseDate(getValue("returnDate"));
+    if (!start || !end) return 1;
+
+    return Math.max(1, Math.round((end - start) / 86400000));
+  }
+
+  function getDaysBucket(days) {
+    if (days <= 1) return "1일";
+    if (days <= 3) return "2~3일";
+    return "4일 이상";
+  }
+
+  function getDeviceType() {
+    if (window.innerWidth < 768) return "mobile";
+    if (window.innerWidth < 1100) return "tablet";
+    return "desktop";
+  }
+
+  function getSnapshot() {
+    const days = getDays();
+
+    return {
+      reason: getActiveKey(".reason-btn"),
+      attendance: getActiveKey(".attendance-btn"),
+      week: getActiveKey(".week-btn"),
+      days_bucket: getDaysBucket(days),
+      has_start_date: Boolean(getValue("absenceDate")),
+      has_return_date: Boolean(getValue("returnDate")),
+      include_empathy: getChecked("includeEmpathy"),
+      include_team: getChecked("includeTeam"),
+      include_admin119: getChecked("includeAdmin"),
+      guide_link_present: Boolean(getValue("guideLink").trim()),
+      apply_link_present: Boolean(getValue("applyLink").trim()),
+      batch_size: getNames().length,
+      device_type: getDeviceType()
+    };
+  }
+
+  function getSessionSalt() {
+    let salt = sessionStorage.getItem(SESSION_SALT_KEY);
+
+    if (!salt) {
+      salt =
+        (window.crypto?.randomUUID?.() || `${Date.now()}_${Math.random()}`)
+          .replace(/[^a-zA-Z0-9]/g, "");
+      sessionStorage.setItem(SESSION_SALT_KEY, salt);
+    }
+
+    return salt;
+  }
+
+  function hashCaseName(name) {
+    const normalized = name.trim().toLowerCase().replace(/\s+/g, "");
+    const source = `${getSessionSalt()}|${normalized}`;
+    let hash = 2166136261;
+
+    for (let index = 0; index < source.length; index += 1) {
+      hash ^= source.charCodeAt(index);
+      hash = Math.imul(hash, 16777619);
+    }
+
+    return `case_${(hash >>> 0).toString(16).padStart(8, "0")}`;
+  }
+
+  function readState() {
+    try {
+      return JSON.parse(sessionStorage.getItem(CASE_STATE_KEY) || "{}");
+    } catch (_error) {
+      return {};
+    }
+  }
+
+  function writeState(state) {
+    sessionStorage.setItem(CASE_STATE_KEY, JSON.stringify(state));
+  }
+
+  function changedFields(base, current) {
+    if (!base) return [];
+
+    return FINAL_FIELDS.filter(field => base[field] !== current[field]);
+  }
+
+  function changedBooleans(fields, suffix) {
+    return FINAL_FIELDS.reduce((result, field) => {
+      result[`changed_${field}_${suffix}`] = fields.includes(field);
+      return result;
+    }, {});
+  }
+
+  function validationFailure() {
+    const names = getNames();
+
+    if (!names.length) {
+      return "name_missing";
+    }
+
+    const attendance = getActiveKey(".attendance-btn");
+    const start = parseDate(getValue("absenceDate"));
+    const end = parseDate(getValue("returnDate"));
+
+    if (attendance === "absence" && start && end && end <= start) {
+      return "invalid_return_date";
+    }
+
+    return "";
+  }
+
+  function registerGeneratedCase(name, snapshot) {
+    const state = readState();
+    const caseId = hashCaseName(name);
+    const now = Date.now();
+    const previous = state[caseId] || null;
+    const firstSnapshot = previous?.first_snapshot || snapshot;
+    const previousSnapshot = previous?.last_snapshot || null;
+    const generationNumber = (previous?.generation_count || 0) + 1;
+    const fromFirst = changedFields(firstSnapshot, snapshot);
+    const fromPrevious = changedFields(previousSnapshot, snapshot);
+
+    state[caseId] = {
+      first_snapshot: firstSnapshot,
+      last_snapshot: snapshot,
+      generation_count: generationNumber,
+      first_generated_at: previous?.first_generated_at || now,
+      last_generated_at: now,
+      finalized_generation: previous?.finalized_generation || 0
+    };
+
+    writeState(state);
+
+    capture("guidance generated", {
+      case_id: caseId,
+      generation_number: generationNumber,
+      changed_fields_from_first: fromFirst,
+      changed_fields_since_previous: fromPrevious,
+      changed_field_count_from_first: fromFirst.length,
+      changed_field_count_since_previous: fromPrevious.length,
+      seconds_since_first_generation: Math.round(
+        (now - state[caseId].first_generated_at) / 1000
+      ),
+      ...changedBooleans(fromFirst, "from_first"),
+      ...changedBooleans(fromPrevious, "since_previous"),
+      ...snapshot
+    });
+  }
+
+  function trackGenerate() {
+    const failureReason = validationFailure();
+    const snapshot = getSnapshot();
+
+    capture("generation attempted", {
+      failure_reason: failureReason || "none",
+      ...snapshot
+    });
+
+    if (failureReason) {
+      capture("generation failed", {
+        failure_reason: failureReason,
+        ...snapshot
+      });
+      return;
+    }
+
+    getNames().forEach(name => registerGeneratedCase(name, snapshot));
+  }
+
+  function finalizeCase(name, finalAction) {
+    const state = readState();
+    const caseId = hashCaseName(name);
+    const current = state[caseId];
+
+    if (!current) return;
+
+    capture("output action completed", {
+      case_id: caseId,
+      action_type: finalAction,
+      generation_number: current.generation_count,
+      ...current.last_snapshot
+    });
+
+    if (current.finalized_generation === current.generation_count) return;
+
+    const fromFirst = changedFields(
+      current.first_snapshot,
+      current.last_snapshot
+    );
+
+    capture("case finalized", {
+      case_id: caseId,
+      final_action: finalAction,
+      generation_count: current.generation_count,
+      changed_fields_from_first: fromFirst,
+      changed_field_count_from_first: fromFirst.length,
+      seconds_to_finalize: Math.round(
+        (Date.now() - current.first_generated_at) / 1000
+      ),
+      ...changedBooleans(fromFirst, "from_first"),
+      ...current.last_snapshot
+    });
+
+    current.finalized_generation = current.generation_count;
+    state[caseId] = current;
+    writeState(state);
+  }
+
+  function finalizeAll(action) {
+    getNames().forEach(name => finalizeCase(name, action));
+  }
+
+  document.addEventListener("click", event => {
+    const target = event.target.closest("button, a");
+    if (!target) return;
+
+    if (target.id === "generate") {
+      setTimeout(trackGenerate, 0);
+      return;
+    }
+
+    if (target.matches(".copy-one:not(.manager-copy-one)")) {
+      const index = Number(target.dataset.index);
+      const name = getNames()[index];
+      if (name) finalizeCase(name, "user_message_copy");
+      return;
+    }
+
+    if (target.matches(".manager-copy-one")) {
+      const index = Number(target.dataset.index);
+      const name = getNames()[index];
+      if (name) finalizeCase(name, "manager_report_copy");
+      return;
+    }
+
+    if (target.id === "copyAll") {
+      finalizeAll("all_user_messages_copy");
+      return;
+    }
+
+    if (target.id === "copyManagerAll") {
+      finalizeAll("all_manager_reports_copy");
+      return;
+    }
+
+    if (target.id === "downloadTxt") {
+      finalizeAll("txt_download");
+      return;
+    }
+
+    if (target.id === "saveSettings") {
+      capture("settings saved", getSnapshot());
+      return;
+    }
+
+    if (target.id === "reset") {
+      capture("generator reset", getSnapshot());
+      return;
+    }
+
+    if (target.matches(".report-link")) {
+      capture("error report opened", getSnapshot());
+    }
+  });
+
+  document.addEventListener("click", event => {
+    const reasonButton = event.target.closest(".reason-btn");
+    if (reasonButton) {
+      capture("reason selected", {
+        reason: reasonButton.dataset.key || "unknown"
+      });
+      return;
+    }
+
+    const attendanceButton = event.target.closest(".attendance-btn");
+    if (attendanceButton) {
+      capture("attendance selected", {
+        attendance: attendanceButton.dataset.key || "unknown"
+      });
+      return;
+    }
+
+    const weekButton = event.target.closest(".week-btn");
+    if (weekButton) {
+      capture("week selected", {
+        week: weekButton.dataset.key || "unknown"
+      });
+    }
+  });
+
+  capture("generator viewed", {
+    device_type: getDeviceType()
+  });
+})();
+</script>
+<!-- GONGGA CUSTOM ANALYTICS END -->
 </body>
 </html>
