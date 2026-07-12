@@ -950,9 +950,9 @@ function escapeHtml(str){
 
 
 const GOOGLE_COUNTER_URL = "https://script.google.com/macros/s/AKfycbzzwkg0vpoFIDmm6L2YkMRht2RsFDIiJPGao3Pu9bCSRagAOxPeAey0vEW2mQAY0z1C/exec";
-let gonggaCounterRequestNumber = 0;
+const pendingCounterRequests = new Map();
 
-function setUsageBadge(count, message = ""){
+function setUsageBadge(count, fallbackText = "누적 집계 오류"){
   const badge = document.getElementById("usageBadge");
   if(!badge) return;
 
@@ -964,76 +964,74 @@ function setUsageBadge(count, message = ""){
     return;
   }
 
-  badge.textContent = message || "누적 집계 오류";
+  badge.textContent = fallbackText;
   badge.title = "전체 누적 횟수를 불러오지 못했습니다.";
 }
 
+window.addEventListener("message", event => {
+  const data = event.data;
+
+  if(
+    !data ||
+    data.source !== "gongga-counter" ||
+    !data.requestId
+  ){
+    return;
+  }
+
+  const pending = pendingCounterRequests.get(data.requestId);
+  if(!pending) return;
+
+  clearTimeout(pending.timeoutId);
+  pending.iframe.remove();
+  pendingCounterRequests.delete(data.requestId);
+
+  if(data.ok === true && Number.isFinite(Number(data.count))){
+    pending.resolve(Number(data.count));
+  }else{
+    pending.reject(new Error(data.error || "counter_bridge_error"));
+  }
+});
+
 function requestGoogleCounter(action){
   return new Promise((resolve, reject) => {
-    const callbackName = `gonggaCb${Date.now()}${++gonggaCounterRequestNumber}`;
-    const script = document.createElement("script");
-    let settled = false;
-    let timeoutId = null;
+    const requestId =
+      `gongga_${Date.now()}_${Math.random().toString(36).slice(2)}`;
 
-    const finish = () => {
-      if(settled) return;
-      settled = true;
-      if(timeoutId) clearTimeout(timeoutId);
-      script.remove();
-      try{
-        delete window[callbackName];
-      }catch(_error){
-        window[callbackName] = undefined;
-      }
-    };
+    const iframe = document.createElement("iframe");
+    iframe.setAttribute("aria-hidden", "true");
+    iframe.tabIndex = -1;
+    iframe.style.position = "fixed";
+    iframe.style.left = "-9999px";
+    iframe.style.width = "1px";
+    iframe.style.height = "1px";
+    iframe.style.opacity = "0";
+    iframe.style.pointerEvents = "none";
+    iframe.style.border = "0";
 
-    window[callbackName] = payload => {
-      const valid =
-        payload &&
-        payload.ok === true &&
-        Number.isFinite(Number(payload.count));
+    const timeoutId = setTimeout(() => {
+      iframe.remove();
+      pendingCounterRequests.delete(requestId);
+      reject(new Error("counter_bridge_timeout"));
+    }, 15000);
 
-      if(valid){
-        const count = Number(payload.count);
-        finish();
-        resolve(count);
-      }else{
-        finish();
-        reject(new Error(payload?.error || "invalid_counter_response"));
-      }
-    };
+    pendingCounterRequests.set(requestId, {
+      resolve,
+      reject,
+      iframe,
+      timeoutId
+    });
 
     const params = new URLSearchParams({
       action,
-      prefix: callbackName,
+      mode: "bridge",
+      requestId,
       t: String(Date.now())
     });
 
-    script.src = `${GOOGLE_COUNTER_URL}?${params.toString()}`;
-    script.async = true;
-
-    script.onerror = () => {
-      finish();
-      reject(new Error("counter_script_load_failed"));
-    };
-
-    timeoutId = setTimeout(() => {
-      finish();
-      reject(new Error("counter_request_timeout"));
-    }, 12000);
-
-    document.head.appendChild(script);
+    iframe.src = `${GOOGLE_COUNTER_URL}?${params.toString()}`;
+    document.body.appendChild(iframe);
   });
-}
-
-function triggerIncrementFallback(){
-  const iframe = document.createElement("iframe");
-  iframe.hidden = true;
-  iframe.setAttribute("aria-hidden", "true");
-  iframe.src =
-    `${GOOGLE_COUNTER_URL}?action=increment&t=${Date.now()}`;
-  document.body.appendChild(iframe);
-  setTimeout(() => iframe.remove(), 15000);
 }
 
 async function loadGlobalUsageCount(){
@@ -1044,9 +1042,12 @@ async function loadGlobalUsageCount(){
     setUsageBadge(count);
   }catch(error){
     console.error("전체 누적 횟수 조회 실패:", error);
-    const cached = Number(localStorage.getItem("gonggaLastGlobalUsageCount"));
 
-    if(Number.isFinite(cached) && cached > 0){
+    const cached = Number(
+      localStorage.getItem("gonggaLastGlobalUsageCount")
+    );
+
+    if(Number.isFinite(cached) && cached >= 0){
       setUsageBadge(cached);
     }else{
       setUsageBadge(null, "누적 집계 오류");
@@ -1055,24 +1056,14 @@ async function loadGlobalUsageCount(){
 }
 
 async function incrementGlobalUsageCount(){
+  setUsageBadge(null, "집계 반영 중");
+
   try{
     const count = await requestGoogleCounter("increment");
     setUsageBadge(count);
   }catch(error){
     console.error("전체 누적 횟수 증가 실패:", error);
-
-    triggerIncrementFallback();
-    setUsageBadge(null, "집계 반영 중");
-
-    setTimeout(async () => {
-      try{
-        const count = await requestGoogleCounter("get");
-        setUsageBadge(count);
-      }catch(retryError){
-        console.error("누적 횟수 재조회 실패:", retryError);
-        setUsageBadge(null, "집계 반영 완료");
-      }
-    }, 1800);
+    setUsageBadge(null, "누적 집계 오류");
   }
 }
 
