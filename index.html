@@ -117,7 +117,7 @@
     }
     .message-card{border:1px solid var(--line);border-radius:13px;background:#fbfcfe;padding:16px;margin-bottom:10px;position:relative}
     .message-name{font-size:12px;font-weight:900;color:#5c6b83;margin-bottom:8px}
-    .message-text{white-space:pre-wrap;font-size:14px;line-height:1.72;color:#28344b;padding-right:40px}
+    .message-text{white-space:pre-wrap;font-size:14px;line-height:1.58;color:#28344b;padding-right:40px}
     .copy-one{position:absolute;right:12px;top:12px;border:0;background:#edf3ff;color:#2b61d7;border-radius:8px;padding:7px 9px;font-size:12px;font-weight:800;cursor:pointer}
     .toast{
       position:fixed;left:50%;bottom:28px;transform:translateX(-50%) translateY(20px);
@@ -707,99 +707,159 @@ function getAttendanceActionNote(){
   return "";
 }
 
-function buildMessage(name){
-  const deadline = document.getElementById("deadline").value.trim() || "결석일 기준 다음 날 오후 4시 전까지";
-  const guide = document.getElementById("guideLink").value.trim();
-  const apply = document.getElementById("applyLink").value.trim();
+function getGreetingParagraph(name){
+  const greetings = {
+    medical: `네, ${name}님. 몸이 좋지 않으시다면 무리하지 마시고 진료 잘 받고 오세요.`,
+    reserve: `네, ${name}님. 예비군 또는 민방위 일정 확인했습니다. 훈련 조심히 다녀오세요.`,
+    interview: `네, ${name}님. 입사 면접 일정 확인했습니다. 준비하신 만큼 잘 보고 오시길 바랍니다.`,
+    exam: `네, ${name}님. 시험 일정 확인했습니다. 시험 잘 보고 오세요.`,
+    bereavement: `네, ${name}님. 많이 경황이 없으시겠습니다. 일정은 걱정하지 마시고 잘 다녀오세요.`,
+    marriage: `네, ${name}님. 결혼 또는 배우자 출산 일정 확인했습니다. 중요한 날 잘 보내고 오세요.`,
+    contest: `네, ${name}님. 해커톤 또는 경진대회 일정 확인했습니다. 좋은 경험하고 안전하게 다녀오세요.`,
+    phone: `네, ${name}님. 스마트폰 문제로 많이 불편하시겠습니다. 필요한 자료를 먼저 확보해주세요.`,
+    system: `네, ${name}님. 출석 시스템 오류 상황 확인했습니다. 오류 화면과 발생 시간을 바로 남겨주세요.`,
+    notAllowed: `네, ${name}님. 말씀해주신 일정 확인했습니다.`
+  };
+
+  return greetings[selectedReason] || `네, ${name}님. 일정 확인했습니다.`;
+}
+
+function getScheduleParagraph(){
   const schedule = getScheduleInfo();
   const date = schedule.startLabel;
   const returnDate = schedule.returnLabel;
-  const attendanceDays = schedule.days;
-  const includeEmpathy = document.getElementById("includeEmpathy").checked;
-  const includeTeam = document.getElementById("includeTeam").checked;
-  const includeAdmin = document.getElementById("includeAdmin").checked;
+  const days = schedule.days;
+  const attendanceLabel = attendanceTypes[selectedAttendance];
+  const sentences = [];
 
-  let parts = [];
+  if(selectedAttendance === "absence"){
+    let scheduleText = "";
 
-  if(selectedReason === "notAllowed"){
-    if(includeEmpathy) parts.push(getEmpathyLine(name));
-
-    if(includeTeam){
-      if(selectedWeek === "selfStudy"){
-        parts.push(`현재는 자율학습 주간이라 별도의 팀별 역할 분담은 없지만, 일정은 팀원분들께 간단히 언질 부탁드립니다. 조심히 다녀오세요!`);
-      }else{
-        parts.push(`현재는 팀프로젝트 주간이므로 역할 분담과 프로젝트 진행에 문제가 없도록 팀원분들과 미리 이야기 나누고 가시고, 해당 일정은 반드시 공유해주세요. 조심히 다녀오세요!`);
-      }
+    if(date && days > 1){
+      scheduleText = `${date}부터 ${days}일간 ${attendanceLabel} 예정`;
+    }else if(date){
+      scheduleText = `${date} 1일 ${attendanceLabel} 예정`;
+    }else if(days > 1){
+      scheduleText = `${days}일간 ${attendanceLabel} 예정`;
     }else{
-      parts.push(`조심히 다녀오세요!`);
+      scheduleText = `1일 ${attendanceLabel} 예정`;
     }
 
-    const halfAttendanceLimitNote = getHalfAttendanceLimitNote();
-    if(halfAttendanceLimitNote) parts.push(halfAttendanceLimitNote);
-
-    const attendanceActionNote = getAttendanceActionNote();
-    if(attendanceActionNote) parts.push(attendanceActionNote);
-
-    return parts.join("\n\n");
+    if(returnDate){
+      sentences.push(`일정은 ${scheduleText}이며, ${returnDate} 복귀 예정으로 확인했습니다.`);
+    }else{
+      sentences.push(`일정은 ${scheduleText}으로 확인했습니다.`);
+    }
+  }else{
+    const dateText = date ? `${date} ` : "";
+    sentences.push(`일정은 ${dateText}${attendanceLabel} 예정으로 확인했습니다.`);
   }
 
-  if(includeEmpathy) parts.push(getEmpathyLine(name));
-  if(includeTeam){
+  if(document.getElementById("includeTeam").checked){
     if(selectedWeek === "selfStudy"){
-      parts.push(`현재는 자율학습 주간이라 별도의 팀별 역할 분담은 없지만, 일정은 팀원분들께 간단히 언질 부탁드립니다.`);
+      sentences.push(`현재는 자율학습 주간이므로 별도의 팀 역할 분담은 없지만, 팀원분들께 일정을 간단히 공유해주세요.`);
     }else{
-      parts.push(`현재는 팀프로젝트 주간이므로 역할 분담과 프로젝트 진행에 문제가 없도록 팀원분들과 미리 이야기 나누고 가시고, 해당 일정은 반드시 공유해주세요.`);
-    }
-  }
-  if(date || attendanceDays){
-    const attendanceDuration = selectedAttendance !== "absence" && attendanceDays === 1
-      ? `${attendanceTypes[selectedAttendance]} 예정`
-      : `${attendanceDays}일 ${attendanceTypes[selectedAttendance]} 예정`;
-
-    if(selectedAttendance === "absence" && returnDate){
-      const startPhrase = attendanceDays > 1 && date
-        ? `${date}부터 ${attendanceDuration}`
-        : date
-          ? `${date}, ${attendanceDuration}`
-          : attendanceDuration;
-      parts.push(`일정은 ${startPhrase}이며, ${returnDate} 복귀 예정으로 확인했습니다.`);
-    }else{
-      const startPhrase = attendanceDays > 1 && date
-        ? `${date}부터 ${attendanceDuration}`
-        : date
-          ? `${date}, ${attendanceDuration}`
-          : attendanceDuration;
-      parts.push(`일정은 ${startPhrase}으로 확인했습니다.`);
+      sentences.push(`현재는 팀프로젝트 주간이므로 역할 분담과 진행에 문제가 없도록 팀원분들과 미리 일정을 조율하고 공유해주세요.`);
     }
   }
 
   const halfAttendanceLimitNote = getHalfAttendanceLimitNote();
-  if(halfAttendanceLimitNote) parts.push(halfAttendanceLimitNote);
+  if(halfAttendanceLimitNote) sentences.push(halfAttendanceLimitNote);
 
   const attendanceActionNote = getAttendanceActionNote();
-  if(attendanceActionNote) parts.push(attendanceActionNote);
+  if(attendanceActionNote) sentences.push(attendanceActionNote);
 
-  parts.push(reasons[selectedReason].template({name, deadline}));
+  return sentences.join(" ");
+}
 
-  const multiDayAbsenceNote = getMultiDayAbsenceNote();
-  if(multiDayAbsenceNote) parts.push(multiDayAbsenceNote);
+function getEvidenceParagraph(name, deadline){
+  const evidence = {
+    medical: `${name}님, 공가 신청 시 병명 또는 질병코드와 방문일이 표시된 진료확인서, 진단서, 처방전 등의 증빙서류를 ${deadline} 제출해주세요.`,
+    reserve: `${name}님, 소집통지서가 아닌 실제 훈련필증 또는 교육필증을 ${deadline} 제출해주세요. 필증에는 훈련 날짜와 발급 확인 정보가 선명하게 표시되어야 합니다.`,
+    interview: `${name}님, 기업 직인이 포함된 면접확인서를 ${deadline} 제출해주세요. 담당자 또는 대표의 서명만 있다면 해당 담당자의 명함도 함께 제출해야 합니다.`,
+    exam: `${name}님, 실제 응시 사실을 확인할 수 있는 응시확인서를 ${deadline} 제출해주세요.`,
+    bereavement: `${name}님, 사망진단서와 가족관계증명서를 모두 ${deadline} 제출해주세요.`,
+    marriage: `${name}님, 본인 결혼은 청첩장, 자녀 결혼은 청첩장과 가족관계증명서, 배우자 출산은 출생증명서와 가족관계증명서를 ${deadline} 제출해주세요.`,
+    contest: `${name}님, 현재 훈련직종과 관련된 행사임을 확인할 수 있는 참여확인서를 ${deadline} 제출해주세요.`,
+    phone: `${name}님, 공가가 아닌 출석입력요청 또는 출석정정으로 처리됩니다. 분실신고증 또는 수리접수증과 해당 시간의 실제 학습기록을 ${deadline} 제출해주세요.`,
+    system: `${name}님, 공가가 아닌 출석입력요청 또는 출석정정으로 처리됩니다. 오류 화면 녹화본과 해당 시간의 실제 학습기록을 ${deadline} 제출해주세요.`,
+    notAllowed: ``
+  };
 
-  const advanceApplicationNote = getAdvanceApplicationNote();
-  if(advanceApplicationNote) parts.push(advanceApplicationNote);
+  return evidence[selectedReason] || "";
+}
 
-  if(guide || apply){
-    let links = [];
-    if(guide) links.push(`공가 신청 가이드: ${guide}`);
-    if(apply) links.push(`공가 신청 링크: ${apply}`);
-    parts.push(links.join("\n"));
+function getExceptionParagraph(){
+  const guide = document.getElementById("guideLink").value.trim();
+  const apply = document.getElementById("applyLink").value.trim();
+  const includeAdmin = document.getElementById("includeAdmin").checked;
+  const sentences = [];
+
+  const exceptions = {
+    medical: `단순 영수증이나 진료비 계산서, 일반 건강검진, 라식·라섹, 미용 목적 진료, 병원에 방문하지 않은 휴식은 공가 인정 대상이 아닙니다. 만 19세 미만 자녀 진료 동반은 자녀 증빙서류와 가족관계증명서가 필요합니다.`,
+    reserve: `소집통지서만으로는 인정되지 않으며, 실제 훈련을 이수한 날짜가 확인되어야 합니다.`,
+    interview: `직인이 없다면 면접 일정 조율 메일이나 문자를 추가로 제출해주세요. 서류 합격 안내문, 면접 통지서, 커피챗 자료만으로는 인정되지 않습니다.`,
+    exam: `접수확인서나 시험 안내문만으로는 인정되지 않습니다. 현재 훈련과정과 관련된 자격시험 또는 채용전형 필기시험만 가능하며, 과정과 무관한 시험이나 대학교 중간·기말고사는 공가 대상이 아닙니다.`,
+    bereavement: `배우자와 본인·배우자의 부모는 5일, 조부모·자녀·형제자매는 3일이 기준이며 사망일 기준으로 한 번 신청하면 됩니다. 삼촌·이모·사촌·지인 등은 공가 대상이 아닙니다.`,
+    marriage: `본인 결혼은 5일, 자녀 결혼은 1일, 배우자 출산은 5일이 기준이며 결혼일 또는 출산일 기준으로 한 번 신청하면 됩니다.`,
+    contest: `단순 컨퍼런스나 세미나 참석은 공가 인정 대상이 아닙니다.`,
+    phone: `고장 난 휴대전화 사진만으로는 인정되지 않으며, 지정된 장소에서 정상적으로 학습한 기록이 함께 확인되어야 합니다.`,
+    system: `개인 인터넷 환경 문제는 인정되지 않습니다. 오류가 발생하면 즉시 화면을 녹화하고 매니저에게 상황을 공유해주세요.`,
+    notAllowed: `해당 사유는 현재 공가 인정 기준에 포함되지 않아 공가 처리가 어렵습니다. 실제 출석 시간에 따라 결석, 지각 또는 조퇴로 처리될 수 있으니 출석 가능한 시간을 먼저 확인해주세요.`
+  };
+
+  if(exceptions[selectedReason]){
+    sentences.push(exceptions[selectedReason]);
+  }
+
+  if(getMultiDayAbsenceNote()){
+    sentences.push(`결석이 여러 날이라면 모든 결석일을 하루 단위로 각각 공가 신청해주세요.`);
+  }
+
+  if(["medical","reserve","interview","exam","bereavement","marriage","contest"].includes(selectedReason)){
+    sentences.push(`당일 서류 준비가 어렵다면 신청 기한이 지나기 전에 공가 신청을 먼저 등록한 뒤 서류를 보완해주세요.`);
+  }
+
+  const links = [];
+  if(guide) links.push(`공가 신청 가이드: ${guide}`);
+  if(apply) links.push(`공가 신청 링크: ${apply}`);
+  if(links.length){
+    sentences.push(links.join("\n"));
   }
 
   if(includeAdmin){
-    parts.push(`공가 사유나 출결 인정 일수에 대한 추가 확인이 필요하거나, 제출 서류와 관련해 가이드 외 궁금한 점이 있다면 행정 119에 문의해주세요.`);
+    sentences.push(`공가 사유나 출결 인정 일수에 대한 추가 확인이 필요하거나, 제출 서류와 관련해 가이드 외 궁금한 점이 있다면 행정 119에 문의해주세요.`);
   }
-  return parts.join("\n\n");
+
+  return sentences.join(" ");
 }
 
+function buildMessage(name){
+  const deadline = document.getElementById("deadline").value.trim() || "결석일 기준 다음 날 오후 4시 전까지";
+  const includeEmpathy = document.getElementById("includeEmpathy").checked;
+  const paragraphs = [];
+
+  if(includeEmpathy){
+    paragraphs.push(getGreetingParagraph(name));
+  }
+
+  const scheduleParagraph = getScheduleParagraph();
+  if(scheduleParagraph){
+    paragraphs.push(scheduleParagraph);
+  }
+
+  const evidenceParagraph = getEvidenceParagraph(name, deadline);
+  if(evidenceParagraph){
+    paragraphs.push(evidenceParagraph);
+  }
+
+  const exceptionParagraph = getExceptionParagraph();
+  if(exceptionParagraph){
+    paragraphs.push(exceptionParagraph);
+  }
+
+  return paragraphs.join("\n\n");
+}
 
 function getManagerGuideSummary(){
   const summaries = {
