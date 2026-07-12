@@ -143,7 +143,7 @@
       .panel-head,.panel-body,.result-head,.result-body{padding-left:16px;padding-right:16px}
       .result-head{align-items:flex-start;flex-direction:column}
     }
-  .usage-counter-frame{width:128px;height:38px;border:0;background:transparent;display:block;overflow:hidden;flex:0 0 128px}
+  
 </style>
 </head>
 <body>
@@ -157,7 +157,7 @@
         <p class="desc">사유를 선택하고 이름만 입력하면, 제출 서류와 주의사항이 포함된 안내 문구를 바로 복사할 수 있습니다.</p>
       </div>
       <div class="top-actions">
-        <iframe id="usageCounterFrame" class="usage-counter-frame" title="누적 사용 횟수" loading="eager" src="https://script.google.com/macros/s/AKfycbzzwkg0vpoFIDmm6L2YkMRht2RsFDIiJPGao3Pu9bCSRagAOxPeAey0vEW2mQAY0z1C/exec?action=get&amp;mode=badge"></iframe>
+        
         <a class="report-link" href="https://docs.google.com/forms/d/e/1FAIpQLSek9vMP-yh-hLQ7PJasaO4DDLLnl7oj1owXTMr9WFOjEK7GCw/viewform?usp=publish-editor" target="_blank" rel="noopener noreferrer" aria-label="오류 제보 구글폼 새 창으로 열기">
           오류 제보
         </a>
@@ -468,8 +468,6 @@ function renderReasons(){
   });
 }
 
-
-
 function renderAttendance(){
   attendanceGrid.innerHTML = Object.entries(attendanceTypes).map(([key,label]) =>
     `<button type="button" class="attendance-btn ${key===selectedAttendance?'active':''}" data-key="${key}">${label}</button>`
@@ -483,7 +481,6 @@ function renderAttendance(){
     });
   });
 }
-
 
 function renderWeekTypes(){
   weekGrid.innerHTML = Object.entries(weekTypes).map(([key,label]) =>
@@ -521,8 +518,6 @@ function getNames(){
   return document.getElementById("names").value
     .split(/\n|,/).map(v=>v.trim()).filter(Boolean);
 }
-
-
 
 function parseDateValue(value){
   if(!value) return null;
@@ -639,8 +634,6 @@ function getEmpathyLine(name){
   return `네, ${name}님. ${dateText}${schedulePhrase} ${endings[selectedReason] || ""}`.trim();
 }
 
-
-
 function getMultiDayAbsenceNote(){
   const schedule = getScheduleInfo();
   const dailyApplicationReasons = ["medical", "reserve", "interview", "exam", "contest"];
@@ -673,7 +666,6 @@ function getAdvanceApplicationNote(){
   return `${common} ${supportive[selectedReason]}`;
 }
 
-
 function getHalfAttendanceLimitNote(){
   if(selectedAttendance === "absence") return "";
 
@@ -691,7 +683,6 @@ function getHalfAttendanceLimitNote(){
 
   return "";
 }
-
 
 function getAttendanceActionNote(){
   if(selectedAttendance === "late"){
@@ -949,37 +940,6 @@ function escapeHtml(str){
   return str.replace(/[&<>"']/g, s => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[s]));
 }
 
-
-const GOOGLE_COUNTER_URL = "https://script.google.com/macros/s/AKfycbzzwkg0vpoFIDmm6L2YkMRht2RsFDIiJPGao3Pu9bCSRagAOxPeAey0vEW2mQAY0z1C/exec";
-
-function getCounterFrame(){
-  return document.getElementById("usageCounterFrame");
-}
-
-function getCounterFrameUrl(action){
-  const params = new URLSearchParams({
-    action,
-    mode: "badge",
-    t: String(Date.now())
-  });
-
-  return `${GOOGLE_COUNTER_URL}?${params.toString()}`;
-}
-
-function loadGlobalUsageCount(){
-  const frame = getCounterFrame();
-  if(!frame) return;
-
-  frame.src = getCounterFrameUrl("get");
-}
-
-function incrementGlobalUsageCount(){
-  const frame = getCounterFrame();
-  if(!frame) return;
-
-  frame.src = getCounterFrameUrl("increment");
-}
-
 function generate(){
   const names = getNames();
   const schedule = getScheduleInfo();
@@ -1024,7 +984,7 @@ function generate(){
     btn.addEventListener("click",()=>copyText(buildManagerReport(names[i])));
   });
 
-  incrementGlobalUsageCount();
+  
 }
 
 async function copyText(text){
@@ -1053,7 +1013,6 @@ document.getElementById("copyAll").addEventListener("click",()=>{
   copyText(all);
 });
 
-
 document.getElementById("copyManagerAll").addEventListener("click",()=>{
   const names=getNames();
   if(!names.length){ showToast("먼저 문구를 생성해주세요."); return; }
@@ -1071,7 +1030,6 @@ document.getElementById("downloadTxt").addEventListener("click",()=>{
   a.href=url; a.download="공가_안내문구.txt"; a.click();
   URL.revokeObjectURL(url);
 });
-
 
 document.getElementById("absenceDate").addEventListener("change",()=>{
   updateReturnDateField();
@@ -1113,7 +1071,7 @@ document.getElementById("reset").addEventListener("click",()=>{
   updateReturnDateField();
   renderWeekTypes();
   renderRule();
-  loadGlobalUsageCount();
+  
 })();
 </script>
 </body>
