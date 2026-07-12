@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="ko">
 <head>
+  <meta name="gongga-counter-version" content="2026-07-12-click-fix">
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2280%22>📄</text></svg>" />
@@ -949,110 +950,129 @@ function escapeHtml(str){
 
 
 const GOOGLE_COUNTER_URL = "https://script.google.com/macros/s/AKfycbzzwkg0vpoFIDmm6L2YkMRht2RsFDIiJPGao3Pu9bCSRagAOxPeAey0vEW2mQAY0z1C/exec";
+let gonggaCounterRequestNumber = 0;
 
-function isUsageCounterConfigured(){
-  return Boolean(
-    GOOGLE_COUNTER_URL &&
-    /^https:\/\/script\.google\.com\/macros\/s\/.+\/exec(?:\?.*)?$/.test(GOOGLE_COUNTER_URL)
-  );
-}
-
-function setUsageBadge(value, error = false){
+function setUsageBadge(count, message = ""){
   const badge = document.getElementById("usageBadge");
+  if(!badge) return;
 
-  if(typeof value === "number" && Number.isFinite(value)){
-    badge.textContent = `누적 ${value.toLocaleString("ko-KR")}회 사용`;
+  if(Number.isFinite(Number(count))){
+    const safeCount = Number(count);
+    badge.textContent = `누적 ${safeCount.toLocaleString("ko-KR")}회 사용`;
     badge.title = "모든 사용자가 문구를 생성한 전체 누적 횟수입니다.";
-    localStorage.setItem("gonggaLastGlobalUsageCount", String(value));
-  }else{
-    badge.textContent = String(value);
-    badge.title = error ? "전체 누적 횟수를 불러오지 못했습니다." : "";
+    localStorage.setItem("gonggaLastGlobalUsageCount", String(safeCount));
+    return;
   }
+
+  badge.textContent = message || "누적 집계 오류";
+  badge.title = "전체 누적 횟수를 불러오지 못했습니다.";
 }
 
 function requestGoogleCounter(action){
   return new Promise((resolve, reject) => {
-    if(!isUsageCounterConfigured()){
-      reject(new Error("usage_counter_not_configured"));
-      return;
-    }
-
-    const callbackName = `gonggaCounterCallback_${Date.now()}_${Math.random().toString(36).slice(2)}`;
+    const callbackName = `gonggaCb${Date.now()}${++gonggaCounterRequestNumber}`;
     const script = document.createElement("script");
-    let completed = false;
+    let settled = false;
+    let timeoutId = null;
 
-    const cleanup = () => {
-      if(completed) return;
-      completed = true;
-      delete window[callbackName];
+    const finish = () => {
+      if(settled) return;
+      settled = true;
+      if(timeoutId) clearTimeout(timeoutId);
       script.remove();
-      clearTimeout(timer);
-    };
-
-    window[callbackName] = payload => {
-      cleanup();
-
-      if(payload && payload.ok && Number.isFinite(Number(payload.count))){
-        resolve(Number(payload.count));
-      }else{
-        reject(new Error(payload?.error || "counter_response_error"));
+      try{
+        delete window[callbackName];
+      }catch(_error){
+        window[callbackName] = undefined;
       }
     };
 
-    const separator = GOOGLE_COUNTER_URL.includes("?") ? "&" : "?";
-    script.src =
-      `${GOOGLE_COUNTER_URL}${separator}` +
-      `action=${encodeURIComponent(action)}` +
-      `&prefix=${encodeURIComponent(callbackName)}` +
-      `&_=${Date.now()}`;
+    window[callbackName] = payload => {
+      const valid =
+        payload &&
+        payload.ok === true &&
+        Number.isFinite(Number(payload.count));
 
-    script.async = true;
-    script.onerror = () => {
-      cleanup();
-      reject(new Error("counter_script_load_error"));
+      if(valid){
+        const count = Number(payload.count);
+        finish();
+        resolve(count);
+      }else{
+        finish();
+        reject(new Error(payload?.error || "invalid_counter_response"));
+      }
     };
 
-    const timer = setTimeout(() => {
-      cleanup();
-      reject(new Error("counter_timeout"));
-    }, 10000);
+    const params = new URLSearchParams({
+      action,
+      prefix: callbackName,
+      t: String(Date.now())
+    });
+
+    script.src = `${GOOGLE_COUNTER_URL}?${params.toString()}`;
+    script.async = true;
+
+    script.onerror = () => {
+      finish();
+      reject(new Error("counter_script_load_failed"));
+    };
+
+    timeoutId = setTimeout(() => {
+      finish();
+      reject(new Error("counter_request_timeout"));
+    }, 12000);
 
     document.head.appendChild(script);
   });
 }
 
+function triggerIncrementFallback(){
+  const iframe = document.createElement("iframe");
+  iframe.hidden = true;
+  iframe.setAttribute("aria-hidden", "true");
+  iframe.src =
+    `${GOOGLE_COUNTER_URL}?action=increment&t=${Date.now()}`;
+  document.body.appendChild(iframe);
+  setTimeout(() => iframe.remove(), 15000);
+}
+
 async function loadGlobalUsageCount(){
-  const cached = Number(localStorage.getItem("gonggaLastGlobalUsageCount"));
-
-  if(Number.isFinite(cached) && cached >= 0){
-    setUsageBadge(cached);
-  }
-
-  if(!isUsageCounterConfigured()){
-    setUsageBadge("누적 집계 연결 필요", true);
-    return;
-  }
+  setUsageBadge(null, "누적 집계 중");
 
   try{
     const count = await requestGoogleCounter("get");
     setUsageBadge(count);
   }catch(error){
-    console.warn("전체 누적 횟수 조회 실패", error);
+    console.error("전체 누적 횟수 조회 실패:", error);
+    const cached = Number(localStorage.getItem("gonggaLastGlobalUsageCount"));
 
-    if(!(Number.isFinite(cached) && cached >= 0)){
-      setUsageBadge("누적 집계 오류", true);
+    if(Number.isFinite(cached) && cached > 0){
+      setUsageBadge(cached);
+    }else{
+      setUsageBadge(null, "누적 집계 오류");
     }
   }
 }
 
 async function incrementGlobalUsageCount(){
-  if(!isUsageCounterConfigured()) return;
-
   try{
     const count = await requestGoogleCounter("increment");
     setUsageBadge(count);
   }catch(error){
-    console.warn("전체 누적 횟수 증가 실패", error);
+    console.error("전체 누적 횟수 증가 실패:", error);
+
+    triggerIncrementFallback();
+    setUsageBadge(null, "집계 반영 중");
+
+    setTimeout(async () => {
+      try{
+        const count = await requestGoogleCounter("get");
+        setUsageBadge(count);
+      }catch(retryError){
+        console.error("누적 횟수 재조회 실패:", retryError);
+        setUsageBadge(null, "집계 반영 완료");
+      }
+    }, 1800);
   }
 }
 
