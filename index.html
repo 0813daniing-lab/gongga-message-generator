@@ -878,18 +878,18 @@ function getExceptionParagraph(){
     sentences.push(`당일 서류 준비가 어렵다면 신청 기한이 지나기 전에 공가 신청을 먼저 등록한 뒤 서류를 보완해주세요.`);
   }
 
-  const links = [];
-  if(guide) links.push(`공가 신청 가이드: ${guide}`);
-  if(apply) links.push(`공가 신청 링크: ${apply}`);
-  if(links.length){
-    sentences.push(links.join("\n"));
-  }
-
   if(includeAdmin){
     sentences.push(`공가 사유나 출결 인정 일수에 대한 추가 확인이 필요하거나, 제출 서류와 관련해 가이드 외 궁금한 점이 있다면 행정 119에 문의해주세요.`);
   }
 
-  return sentences.join(" ");
+  const links = [];
+  if(guide) links.push(`공가 신청 가이드: ${guide}`);
+  if(apply) links.push(`공가 신청 링크: ${apply}`);
+
+  const body = sentences.join(" ");
+  const linkBlock = links.join("\n");
+
+  return linkBlock ? `${body}\n\n${linkBlock}` : body;
 }
 
 function buildMessage(name){
