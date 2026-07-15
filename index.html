@@ -148,26 +148,23 @@
 
 
 
+
+
+
 /* GONGGA REASON EDITOR START */
 .shared-rule-toolbar{
   display:flex;align-items:center;justify-content:space-between;
   gap:12px;margin-bottom:10px
 }
-.shared-rule-toolbar-title{
-  font-size:13px;font-weight:900;color:#34425d
-}
-.shared-rule-toolbar-actions{
-  display:flex;align-items:center;gap:8px;flex-wrap:wrap
-}
+.shared-rule-toolbar-title{font-size:13px;font-weight:900;color:#34425d}
+.shared-rule-toolbar-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 .shared-rule-version{
   display:inline-flex;align-items:center;justify-content:center;
   min-height:32px;padding:0 10px;border:1px solid #d9e2f1;
   border-radius:999px;background:#fff;color:#66748d;
   font-size:11px;font-weight:800;white-space:nowrap
 }
-.shared-rule-version.error{
-  border-color:#f1b7b7;background:#fff3f3;color:#b12a2a
-}
+.shared-rule-version.error{border-color:#f1b7b7;background:#fff3f3;color:#b12a2a}
 .shared-rule-edit-btn{
   display:inline-flex;align-items:center;justify-content:center;
   min-height:32px;padding:0 11px;border:1px solid #8fabe8;
@@ -183,7 +180,7 @@
 }
 .gongga-reason-editor-overlay.open{display:flex}
 .gongga-reason-editor-modal{
-  width:min(1000px,100%);max-height:92vh;overflow:hidden;
+  width:min(1040px,100%);max-height:92vh;overflow:hidden;
   border-radius:20px;background:#fff;border:1px solid #dfe6f2;
   box-shadow:0 30px 80px rgba(13,25,49,.28);
   display:grid;grid-template-rows:auto 1fr
@@ -192,9 +189,7 @@
   display:flex;align-items:flex-start;justify-content:space-between;gap:16px;
   padding:20px 22px;border-bottom:1px solid #e7ecf4
 }
-.gongga-reason-editor-header h2{
-  margin:0;font-size:20px;color:#1e2a43
-}
+.gongga-reason-editor-header h2{margin:0;font-size:20px;color:#1e2a43}
 .gongga-reason-editor-header p{
   margin:6px 0 0;font-size:13px;line-height:1.5;color:#6d7890
 }
@@ -203,15 +198,11 @@
   border-radius:10px;color:#617088;font-size:20px;cursor:pointer
 }
 .gongga-reason-editor-body{
-  display:grid;grid-template-columns:minmax(0,1.35fr) minmax(280px,.65fr);
+  display:grid;grid-template-columns:minmax(0,1.4fr) minmax(280px,.6fr);
   min-height:0
 }
-.gongga-reason-editor-main,.gongga-reason-editor-history{
-  padding:20px;overflow:auto
-}
-.gongga-reason-editor-history{
-  border-left:1px solid #e7ecf4;background:#fafbfd
-}
+.gongga-reason-editor-main,.gongga-reason-editor-history{padding:20px;overflow:auto}
+.gongga-reason-editor-history{border-left:1px solid #e7ecf4;background:#fafbfd}
 .gongga-reason-warning{
   border:1px solid #efc378;background:#fff8e9;color:#7e4d0d;
   border-radius:12px;padding:13px 14px;margin-bottom:16px;
@@ -222,31 +213,25 @@
   border:1px solid #d9e3f4;background:#f6f9ff;border-radius:12px;
   padding:12px 14px;margin-bottom:16px
 }
-.gongga-selected-reason span:first-child{
-  font-size:12px;color:#71809a;font-weight:800
-}
-.gongga-selected-reason strong{
-  font-size:15px;color:#274f9f
-}
+.gongga-selected-reason span:first-child{font-size:12px;color:#71809a;font-weight:800}
+.gongga-selected-reason strong{font-size:15px;color:#274f9f}
 .gongga-reason-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .gongga-reason-field{display:grid;gap:6px;margin-bottom:12px}
 .gongga-reason-field.full{grid-column:1/-1}
-.gongga-reason-field label{
-  font-size:12px;font-weight:900;color:#44516a
-}
-.gongga-reason-field small{
-  font-size:11px;line-height:1.45;color:#7b879d
-}
+.gongga-reason-field label{font-size:12px;font-weight:900;color:#44516a}
+.gongga-reason-field small{font-size:11px;line-height:1.45;color:#7b879d}
 .gongga-reason-field input,.gongga-reason-field textarea{
   width:100%;border:1px solid #d7e0ef;border-radius:10px;background:#fff;
   padding:10px 11px;font:inherit;font-size:13px;color:#27344d;outline:none
 }
-.gongga-reason-field textarea{
-  min-height:96px;resize:vertical;line-height:1.55
-}
+.gongga-reason-field textarea{min-height:96px;resize:vertical;line-height:1.55}
 .gongga-reason-field textarea.tall{min-height:132px}
 .gongga-reason-field input:focus,.gongga-reason-field textarea:focus{
   border-color:#7398e9;box-shadow:0 0 0 3px rgba(73,116,214,.12)
+}
+.gongga-reason-section-title{
+  grid-column:1/-1;margin:6px 0 0;padding-top:12px;
+  border-top:1px solid #e7ecf4;font-size:13px;font-weight:900;color:#28364f
 }
 .gongga-reason-editor-actions{
   display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap;margin-top:16px
@@ -257,9 +242,7 @@
 }
 .gongga-reason-reload{background:#edf3ff;color:#315fc4}
 .gongga-reason-save{background:#3569d4;color:#fff}
-.gongga-reason-status{
-  margin-bottom:12px;font-size:12px;line-height:1.5;color:#6e7a92
-}
+.gongga-reason-status{margin-bottom:12px;font-size:12px;line-height:1.5;color:#6e7a92}
 .gongga-reason-history-list{display:grid;gap:10px}
 .gongga-reason-history-card{
   border:1px solid #dfe6f2;border-radius:12px;background:#fff;padding:12px
@@ -271,16 +254,11 @@
   display:flex;justify-content:space-between;gap:10px;
   font-size:13px;font-weight:900;color:#2a3750
 }
-.gongga-reason-history-meta{
-  margin-top:5px;font-size:11px;line-height:1.45;color:#77839a
-}
+.gongga-reason-history-meta{margin-top:5px;font-size:11px;line-height:1.45;color:#77839a}
 .gongga-reason-history-note{
-  margin-top:8px;font-size:12px;line-height:1.5;color:#414e65;
-  white-space:pre-wrap
+  margin-top:8px;font-size:12px;line-height:1.5;color:#414e65;white-space:pre-wrap
 }
-.gongga-reason-history-actions{
-  display:flex;gap:6px;flex-wrap:wrap;margin-top:10px
-}
+.gongga-reason-history-actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
 .gongga-reason-history-actions button{
   border:1px solid #d4def0;background:#f4f7fd;color:#315fc4;
   border-radius:8px;padding:7px 9px;font-size:11px;font-weight:900;cursor:pointer
@@ -1648,13 +1626,16 @@ document.getElementById("reset").addEventListener("click",()=>{
 
 
 
+
+
+
 <!-- GONGGA REASON EDITOR MODAL START -->
 <div class="gongga-reason-editor-overlay" id="gonggaReasonEditorOverlay" aria-hidden="true">
   <div class="gongga-reason-editor-modal" role="dialog" aria-modal="true" aria-labelledby="gonggaReasonEditorTitle">
     <div class="gongga-reason-editor-header">
       <div>
-        <h2 id="gonggaReasonEditorTitle">선택 사유 핵심 기준 편집</h2>
-        <p>핵심 기준과 해당 기준을 바탕으로 생성되는 안내 문구를 한 번에 수정합니다.</p>
+        <h2 id="gonggaReasonEditorTitle">선택 사유 전체 내용 편집</h2>
+        <p>사유명, 처리 구분, 확인 항목, 핵심 기준과 생성 문구를 한 번에 수정합니다.</p>
       </div>
       <button class="gongga-reason-editor-close" id="gonggaReasonEditorClose" type="button" aria-label="닫기">×</button>
     </div>
@@ -1662,7 +1643,7 @@ document.getElementById("reset").addEventListener("click",()=>{
     <div class="gongga-reason-editor-body">
       <section class="gongga-reason-editor-main">
         <div class="gongga-reason-warning">
-          저장하면 선택한 사유의 핵심 기준과 생성 문구가 모든 사용자에게 동시에 적용됩니다. 행정 기준이 확실한 경우에만 수정해주세요.
+          저장하면 아래 내용이 모두 함께 변경됩니다. 선택 사유 핵심 기준 화면과 해당 기준을 바탕으로 생성되는 수강생 안내 문구에 즉시 적용됩니다.
         </div>
 
         <div class="gongga-selected-reason">
@@ -1681,14 +1662,31 @@ document.getElementById("reset").addEventListener("click",()=>{
           </div>
           <div class="gongga-reason-field">
             <label for="gonggaReasonChangeNote">변경 사유</label>
-            <input id="gonggaReasonChangeNote" maxlength="500" placeholder="예: 예비군 증빙서류 기준 변경">
+            <input id="gonggaReasonChangeNote" maxlength="500" placeholder="예: 입사 면접 증빙 기준 변경">
+          </div>
+
+          <div class="gongga-reason-section-title">선택 사유 핵심 기준 카드</div>
+
+          <div class="gongga-reason-field">
+            <label for="gonggaReasonLabel">사유명</label>
+            <input id="gonggaReasonLabel" placeholder="예: 입사 면접">
+          </div>
+          <div class="gongga-reason-field">
+            <label for="gonggaReasonBadgePrimary">처리 구분</label>
+            <input id="gonggaReasonBadgePrimary" placeholder="예: 공가">
+          </div>
+          <div class="gongga-reason-field full">
+            <label for="gonggaReasonBadgeSecondary">확인 항목</label>
+            <input id="gonggaReasonBadgeSecondary" placeholder="예: 직인 확인">
           </div>
 
           <div class="gongga-reason-field full">
             <label for="gonggaReasonRules">선택 사유 핵심 기준</label>
-            <small>화면의 ‘선택 사유 핵심 기준’에 표시됩니다. 기준 하나당 한 줄씩 입력하세요.</small>
+            <small>기준 하나당 한 줄씩 입력하세요.</small>
             <textarea class="tall" id="gonggaReasonRules"></textarea>
           </div>
+
+          <div class="gongga-reason-section-title">위 기준을 바탕으로 생성되는 안내 문구</div>
 
           <div class="gongga-reason-field full">
             <label for="gonggaReasonGreeting">인사 문구</label>
@@ -1711,7 +1709,7 @@ document.getElementById("reset").addEventListener("click",()=>{
 
         <div class="gongga-reason-editor-actions">
           <button class="gongga-reason-reload" id="gonggaReasonReload" type="button">최신 내용 다시 불러오기</button>
-          <button class="gongga-reason-save" id="gonggaReasonSave" type="button">핵심 기준과 문구 함께 저장</button>
+          <button class="gongga-reason-save" id="gonggaReasonSave" type="button">전체 내용 함께 저장</button>
         </div>
       </section>
 
@@ -1732,6 +1730,8 @@ document.getElementById("reset").addEventListener("click",()=>{
 (() => {
   const SUPABASE_REST_URL = "https://bjeqqlnkbqwmeyunraxl.supabase.co/rest/v1";
   const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_3GQxxaBEs9j8adqqHbIziQ_MJ7Be1iJ";
+  const originalBuildMessage =
+    typeof window.buildMessage === "function" ? window.buildMessage : null;
 
   let currentSharedConfig = null;
   let currentSharedVersion = 1;
@@ -1793,30 +1793,72 @@ document.getElementById("reset").addEventListener("click",()=>{
     if (Number.isNaN(date.getTime())) return "";
 
     return new Intl.DateTimeFormat("ko-KR", {
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit",
-      hour: "2-digit",
-      minute: "2-digit"
+      year: "numeric", month: "2-digit", day: "2-digit",
+      hour: "2-digit", minute: "2-digit"
     }).format(date);
   }
 
+  function hardcodedBadgeTexts(reasonKey) {
+    if (typeof reasons === "undefined") return [];
+    const chips = reasons?.[reasonKey]?.chips;
+    if (!Array.isArray(chips)) return [];
+
+    return chips.map(item => {
+      if (Array.isArray(item)) return String(item[0] || "").trim();
+      return String(item || "").trim();
+    }).filter(Boolean);
+  }
+
+  function normalizeConfig(config) {
+    const normalized = clone(config || {});
+    normalized.reasons = normalized.reasons || {};
+
+    Object.entries(normalized.reasons).forEach(([key, reason]) => {
+      reason.label = String(reason.label || key);
+      reason.rules = Array.isArray(reason.rules) ? reason.rules : [];
+      reason.greeting = String(reason.greeting || "");
+      reason.evidence = String(reason.evidence || "");
+      reason.exception = String(reason.exception || "");
+
+      if (!Array.isArray(reason.badges)) {
+        reason.badges = hardcodedBadgeTexts(key);
+      }
+
+      reason.badges = reason.badges
+        .map(item => String(item || "").trim())
+        .filter(Boolean);
+    });
+
+    return normalized;
+  }
+
   function getReasonLabel(reasonKey) {
-    if (currentSharedConfig?.reasons?.[reasonKey]?.label) {
-      return currentSharedConfig.reasons[reasonKey].label;
-    }
-
-    if (typeof reasons !== "undefined" && reasons[reasonKey]?.label) {
-      return reasons[reasonKey].label;
-    }
-
-    return reasonKey;
+    return currentSharedConfig?.reasons?.[reasonKey]?.label ||
+      (typeof reasons !== "undefined" ? reasons?.[reasonKey]?.label : "") ||
+      reasonKey;
   }
 
   function renderTemplate(template, values) {
     return String(template || "")
       .replaceAll("{name}", values.name || "")
       .replaceAll("{deadline}", values.deadline || "");
+  }
+
+  function applySharedReasonMetadata() {
+    if (!currentSharedConfig || typeof reasons === "undefined") return;
+
+    Object.entries(currentSharedConfig.reasons || {}).forEach(([key, sharedReason]) => {
+      if (!reasons[key]) return;
+
+      const oldChips = Array.isArray(reasons[key].chips) ? reasons[key].chips : [];
+      const oldColors = oldChips.map(item => Array.isArray(item) ? item[1] : null);
+
+      reasons[key].label = sharedReason.label || reasons[key].label;
+      reasons[key].chips = (sharedReason.badges || []).map((text, index) => [
+        text,
+        oldColors[index] || (index === 0 ? "blue" : "orange")
+      ]);
+    });
   }
 
   function applySharedGlobals() {
@@ -1834,17 +1876,24 @@ document.getElementById("reset").addEventListener("click",()=>{
   function renderSharedRulePanel() {
     const panel = document.getElementById("rulePanel");
 
-    if (
-      !panel ||
-      !currentSharedConfig ||
-      typeof selectedReason === "undefined" ||
-      typeof reasons === "undefined"
-    ) return;
+    if (!panel || !currentSharedConfig || typeof selectedReason === "undefined") return;
 
-    const reasonMeta = reasons[selectedReason];
     const sharedReason = currentSharedConfig.reasons?.[selectedReason];
+    if (!sharedReason) return;
 
-    if (!reasonMeta || !sharedReason) return;
+    const originalChips =
+      typeof reasons !== "undefined" && Array.isArray(reasons?.[selectedReason]?.chips)
+        ? reasons[selectedReason].chips
+        : [];
+
+    const badgeHtml = (sharedReason.badges || []).map((text, index) => {
+      const color =
+        Array.isArray(originalChips[index]) && originalChips[index][1]
+          ? originalChips[index][1]
+          : index === 0 ? "blue" : "orange";
+
+      return `<span class="chip ${escapeHtml(color)}">${escapeHtml(text)}</span>`;
+    }).join("");
 
     panel.innerHTML = `
       <div class="shared-rule-toolbar">
@@ -1852,21 +1901,19 @@ document.getElementById("reset").addEventListener("click",()=>{
         <div class="shared-rule-toolbar-actions">
           <span class="shared-rule-version" id="gonggaSharedVersion">v${currentSharedVersion}</span>
           <button class="shared-rule-edit-btn" id="gonggaEditSelectedReason" type="button">
-            이 사유 기준·문구 편집
+            이 사유 전체 내용 편집
           </button>
         </div>
       </div>
+
       <div class="rule-card">
-        <div class="rule-title">${escapeHtml(reasonMeta.label || sharedReason.label)}</div>
-        <div class="chips">
-          ${(reasonMeta.chips || []).map(([text, color]) =>
-            `<span class="chip ${escapeHtml(color)}">${escapeHtml(text)}</span>`
-          ).join("")}
-        </div>
+        <div class="rule-title">${escapeHtml(sharedReason.label)}</div>
+        <div class="chips">${badgeHtml}</div>
         <ul class="rule-list">
           ${(sharedReason.rules || []).map(item => `<li>${escapeHtml(item)}</li>`).join("")}
         </ul>
       </div>
+
       <div class="notice">${escapeHtml(currentSharedConfig.officialNotice || "")}</div>
     `;
   }
@@ -1926,13 +1973,11 @@ document.getElementById("reset").addEventListener("click",()=>{
 
   window.buildMessage = function(name) {
     if (!currentSharedConfig) {
-      return typeof window.__originalBuildMessage === "function"
-        ? window.__originalBuildMessage(name)
-        : "";
+      return originalBuildMessage ? originalBuildMessage(name) : "";
     }
 
     const reason = currentSharedConfig.reasons?.[selectedReason];
-    if (!reason) return "";
+    if (!reason) return originalBuildMessage ? originalBuildMessage(name) : "";
 
     const deadline =
       currentSharedConfig.deadline ||
@@ -1953,7 +1998,6 @@ document.getElementById("reset").addEventListener("click",()=>{
     }
 
     const finalSentences = [];
-
     if (reason.exception) finalSentences.push(reason.exception);
 
     if (typeof getMultiDayAbsenceNote === "function" && getMultiDayAbsenceNote()) {
@@ -1990,11 +2034,12 @@ document.getElementById("reset").addEventListener("click",()=>{
     try {
       const result = await rpc("get_gongga_shared_config");
 
-      currentSharedConfig = result?.config ? clone(result.config) : null;
+      currentSharedConfig = normalizeConfig(result?.config);
       currentSharedVersion = Number(result?.version || 1);
       currentUpdatedAt = result?.updated_at || null;
       currentUpdatedBy = result?.updated_by || "시스템";
 
+      applySharedReasonMetadata();
       applySharedGlobals();
       renderSharedRulePanel();
 
@@ -2016,23 +2061,50 @@ document.getElementById("reset").addEventListener("click",()=>{
     const reason = currentSharedConfig?.reasons?.[editorReasonKey];
     if (!reason) return;
 
+    const badges = Array.isArray(reason.badges) ? reason.badges : [];
+
     document.getElementById("gonggaEditingReasonLabel").textContent =
-      getReasonLabel(editorReasonKey);
+      reason.label || getReasonLabel(editorReasonKey);
 
-    document.getElementById("gonggaReasonRules").value =
-      (reason.rules || []).join("\n");
-
-    document.getElementById("gonggaReasonGreeting").value =
-      reason.greeting || "";
-
-    document.getElementById("gonggaReasonEvidence").value =
-      reason.evidence || "";
-
-    document.getElementById("gonggaReasonException").value =
-      reason.exception || "";
+    document.getElementById("gonggaReasonLabel").value = reason.label || "";
+    document.getElementById("gonggaReasonBadgePrimary").value = badges[0] || "";
+    document.getElementById("gonggaReasonBadgeSecondary").value = badges[1] || "";
+    document.getElementById("gonggaReasonRules").value = (reason.rules || []).join("\n");
+    document.getElementById("gonggaReasonGreeting").value = reason.greeting || "";
+    document.getElementById("gonggaReasonEvidence").value = reason.evidence || "";
+    document.getElementById("gonggaReasonException").value = reason.exception || "";
 
     statusText.textContent =
       `현재 적용 버전 v${currentSharedVersion} · ${formatDate(currentUpdatedAt)} · ${currentUpdatedBy}`;
+  }
+
+  function readReasonEditorFields(config) {
+    const reason = config.reasons[editorReasonKey];
+
+    reason.label =
+      document.getElementById("gonggaReasonLabel").value.trim() ||
+      reason.label ||
+      editorReasonKey;
+
+    reason.badges = [
+      document.getElementById("gonggaReasonBadgePrimary").value.trim(),
+      document.getElementById("gonggaReasonBadgeSecondary").value.trim()
+    ].filter(Boolean);
+
+    reason.rules =
+      document.getElementById("gonggaReasonRules").value
+        .split("\n")
+        .map(item => item.trim())
+        .filter(Boolean);
+
+    reason.greeting =
+      document.getElementById("gonggaReasonGreeting").value.trim();
+
+    reason.evidence =
+      document.getElementById("gonggaReasonEvidence").value.trim();
+
+    reason.exception =
+      document.getElementById("gonggaReasonException").value.trim();
   }
 
   async function loadHistory() {
@@ -2047,9 +2119,7 @@ document.getElementById("reset").addEventListener("click",()=>{
         const actionText =
           item.action === "rollback"
             ? `v${item.source_version}으로 되돌림`
-            : item.action === "initial"
-              ? "초기 등록"
-              : "수정";
+            : item.action === "initial" ? "초기 등록" : "수정";
 
         return `
           <div class="gongga-reason-history-card ${current ? "current" : ""}">
@@ -2083,9 +2153,7 @@ document.getElementById("reset").addEventListener("click",()=>{
   }
 
   async function openReasonEditor() {
-    if (!currentSharedConfig) {
-      await loadSharedConfig(false);
-    }
+    if (!currentSharedConfig) await loadSharedConfig(false);
 
     editorReasonKey =
       typeof selectedReason !== "undefined" ? selectedReason : "medical";
@@ -2105,35 +2173,22 @@ document.getElementById("reset").addEventListener("click",()=>{
   }
 
   async function saveReason() {
-    const reason = currentSharedConfig?.reasons?.[editorReasonKey];
-    if (!reason) return;
+    if (!currentSharedConfig?.reasons?.[editorReasonKey]) return;
 
     const updatedConfig = clone(currentSharedConfig);
-
-    updatedConfig.reasons[editorReasonKey].rules =
-      document.getElementById("gonggaReasonRules").value
-        .split("\n")
-        .map(item => item.trim())
-        .filter(Boolean);
-
-    updatedConfig.reasons[editorReasonKey].greeting =
-      document.getElementById("gonggaReasonGreeting").value.trim();
-
-    updatedConfig.reasons[editorReasonKey].evidence =
-      document.getElementById("gonggaReasonEvidence").value.trim();
-
-    updatedConfig.reasons[editorReasonKey].exception =
-      document.getElementById("gonggaReasonException").value.trim();
+    readReasonEditorFields(updatedConfig);
 
     const editorName =
       document.getElementById("gonggaReasonEditorName").value.trim() || "익명";
 
+    const reasonLabel = updatedConfig.reasons[editorReasonKey].label;
+
     const changeNote =
       document.getElementById("gonggaReasonChangeNote").value.trim() ||
-      `${getReasonLabel(editorReasonKey)} 기준 및 생성 문구 수정`;
+      `${reasonLabel} 전체 내용 수정`;
 
     if (!confirm(
-      `${getReasonLabel(editorReasonKey)}의 핵심 기준과 생성 문구를 모든 사용자에게 함께 적용할까요?`
+      `${reasonLabel}의 사유명, 처리 구분, 확인 항목, 핵심 기준과 생성 문구를 모두 함께 적용할까요?`
     )) return;
 
     const saveButton = document.getElementById("gonggaReasonSave");
@@ -2148,19 +2203,18 @@ document.getElementById("reset").addEventListener("click",()=>{
         p_expected_version: currentSharedVersion
       });
 
-      currentSharedConfig = clone(result.config);
+      currentSharedConfig = normalizeConfig(result.config);
       currentSharedVersion = Number(result.version);
       currentUpdatedAt = result.updated_at;
       currentUpdatedBy = result.updated_by;
 
+      applySharedReasonMetadata();
       applySharedGlobals();
       renderSharedRulePanel();
       loadReasonEditorFields();
       await loadHistory();
 
-      notify(
-        `${getReasonLabel(editorReasonKey)} 핵심 기준과 생성 문구를 v${currentSharedVersion}으로 함께 저장했습니다.`
-      );
+      notify(`${reasonLabel} 전체 내용을 v${currentSharedVersion}으로 함께 저장했습니다.`);
     } catch (error) {
       console.error(error);
 
@@ -2174,29 +2228,25 @@ document.getElementById("reset").addEventListener("click",()=>{
       }
     } finally {
       saveButton.disabled = false;
-      saveButton.textContent = "핵심 기준과 문구 함께 저장";
+      saveButton.textContent = "전체 내용 함께 저장";
     }
   }
 
   document.addEventListener("click", event => {
-    const editButton = event.target.closest("#gonggaEditSelectedReason");
-    if (editButton) {
+    if (event.target.closest("#gonggaEditSelectedReason")) {
       openReasonEditor();
-      return;
     }
   });
 
-  document.getElementById("gonggaReasonSave")
-    .addEventListener("click", saveReason);
+  document.getElementById("gonggaReasonSave").addEventListener("click", saveReason);
 
-  document.getElementById("gonggaReasonReload")
-    .addEventListener("click", async () => {
-      await loadSharedConfig(true);
-      editorReasonKey =
-        typeof selectedReason !== "undefined" ? selectedReason : editorReasonKey;
-      loadReasonEditorFields();
-      await loadHistory();
-    });
+  document.getElementById("gonggaReasonReload").addEventListener("click", async () => {
+    await loadSharedConfig(true);
+    editorReasonKey =
+      typeof selectedReason !== "undefined" ? selectedReason : editorReasonKey;
+    loadReasonEditorFields();
+    await loadHistory();
+  });
 
   closeButton.addEventListener("click", closeReasonEditor);
 
@@ -2214,32 +2264,30 @@ document.getElementById("reset").addEventListener("click",()=>{
 
     if (loadButton) {
       const version = Number(loadButton.dataset.loadVersion);
-      const result = await rpc(
-        "get_gongga_shared_config_version",
-        {p_version: version}
-      );
+      const result = await rpc("get_gongga_shared_config_version", {
+        p_version: version
+      });
 
-      const oldReason = result?.config?.reasons?.[editorReasonKey];
+      const oldConfig = normalizeConfig(result?.config);
+      const oldReason = oldConfig?.reasons?.[editorReasonKey];
 
       if (!oldReason) {
         notify("해당 버전에서 선택 사유 내용을 찾지 못했습니다.");
         return;
       }
 
-      document.getElementById("gonggaReasonRules").value =
-        (oldReason.rules || []).join("\n");
+      const badges = oldReason.badges || [];
 
-      document.getElementById("gonggaReasonGreeting").value =
-        oldReason.greeting || "";
-
-      document.getElementById("gonggaReasonEvidence").value =
-        oldReason.evidence || "";
-
-      document.getElementById("gonggaReasonException").value =
-        oldReason.exception || "";
+      document.getElementById("gonggaReasonLabel").value = oldReason.label || "";
+      document.getElementById("gonggaReasonBadgePrimary").value = badges[0] || "";
+      document.getElementById("gonggaReasonBadgeSecondary").value = badges[1] || "";
+      document.getElementById("gonggaReasonRules").value = (oldReason.rules || []).join("\n");
+      document.getElementById("gonggaReasonGreeting").value = oldReason.greeting || "";
+      document.getElementById("gonggaReasonEvidence").value = oldReason.evidence || "";
+      document.getElementById("gonggaReasonException").value = oldReason.exception || "";
 
       statusText.textContent =
-        `v${version}의 ${getReasonLabel(editorReasonKey)} 내용을 편집창에 불러왔습니다. 저장 전까지 적용되지 않습니다.`;
+        `v${version}의 ${oldReason.label || getReasonLabel(editorReasonKey)} 전체 내용을 편집창에 불러왔습니다. 저장 전까지 적용되지 않습니다.`;
 
       return;
     }
@@ -2261,11 +2309,12 @@ document.getElementById("reset").addEventListener("click",()=>{
           p_expected_version: currentSharedVersion
         });
 
-        currentSharedConfig = clone(result.config);
+        currentSharedConfig = normalizeConfig(result.config);
         currentSharedVersion = Number(result.version);
         currentUpdatedAt = result.updated_at;
         currentUpdatedBy = result.updated_by;
 
+        applySharedReasonMetadata();
         applySharedGlobals();
         renderSharedRulePanel();
         loadReasonEditorFields();
@@ -2279,12 +2328,8 @@ document.getElementById("reset").addEventListener("click",()=>{
     }
   });
 
-  if (typeof window.__originalBuildMessage !== "function" && typeof buildMessage === "function") {
-    window.__originalBuildMessage = buildMessage;
-  }
-
   const originalRenderRule =
-    typeof renderRule === "function" ? renderRule : null;
+    typeof window.renderRule === "function" ? window.renderRule : null;
 
   if (originalRenderRule) {
     window.renderRule = function() {
