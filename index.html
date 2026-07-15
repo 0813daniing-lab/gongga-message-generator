@@ -145,88 +145,155 @@
     }
   
 
-/* GONGGA SHARED EDITOR START */
-.guide-admin-btn{
-  display:inline-flex;align-items:center;justify-content:center;
-  min-height:38px;padding:0 14px;border:1px solid #a9bff0;
-  background:#f5f8ff;color:#315fc4;border-radius:999px;
-  font-size:13px;font-weight:800;cursor:pointer;white-space:nowrap
+
+
+
+/* GONGGA REASON EDITOR START */
+.shared-rule-toolbar{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:12px;margin-bottom:10px
 }
-.guide-admin-btn:hover{background:#eaf1ff;border-color:#6f94e8}
-.guide-version-badge{
-  display:inline-flex;align-items:center;justify-content:center;
-  min-height:38px;padding:0 12px;border:1px solid #dbe3f2;
-  background:#fff;color:#60708d;border-radius:999px;
-  font-size:12px;font-weight:800;white-space:nowrap
+.shared-rule-toolbar-title{
+  font-size:13px;font-weight:900;color:#34425d
 }
-.guide-version-badge.error{border-color:#f2b6b6;background:#fff3f3;color:#b62929}
-.gongga-editor-overlay{
+.shared-rule-toolbar-actions{
+  display:flex;align-items:center;gap:8px;flex-wrap:wrap
+}
+.shared-rule-version{
+  display:inline-flex;align-items:center;justify-content:center;
+  min-height:32px;padding:0 10px;border:1px solid #d9e2f1;
+  border-radius:999px;background:#fff;color:#66748d;
+  font-size:11px;font-weight:800;white-space:nowrap
+}
+.shared-rule-version.error{
+  border-color:#f1b7b7;background:#fff3f3;color:#b12a2a
+}
+.shared-rule-edit-btn{
+  display:inline-flex;align-items:center;justify-content:center;
+  min-height:32px;padding:0 11px;border:1px solid #8fabe8;
+  border-radius:9px;background:#edf3ff;color:#315fc4;
+  font-size:12px;font-weight:900;cursor:pointer
+}
+.shared-rule-edit-btn:hover{background:#dfeaff;border-color:#668ee4}
+
+.gongga-reason-editor-overlay{
   position:fixed;inset:0;z-index:9999;display:none;
-  align-items:center;justify-content:center;padding:24px;
-  background:rgba(18,27,47,.52);backdrop-filter:blur(5px)
+  align-items:center;justify-content:center;padding:22px;
+  background:rgba(19,28,48,.52);backdrop-filter:blur(5px)
 }
-.gongga-editor-overlay.open{display:flex}
-.gongga-editor-modal{
-  width:min(1120px,100%);max-height:92vh;overflow:hidden;
-  border-radius:20px;background:#fff;box-shadow:0 30px 80px rgba(12,25,51,.28);
-  border:1px solid #dfe6f3;display:grid;grid-template-rows:auto 1fr
+.gongga-reason-editor-overlay.open{display:flex}
+.gongga-reason-editor-modal{
+  width:min(1000px,100%);max-height:92vh;overflow:hidden;
+  border-radius:20px;background:#fff;border:1px solid #dfe6f2;
+  box-shadow:0 30px 80px rgba(13,25,49,.28);
+  display:grid;grid-template-rows:auto 1fr
 }
-.gongga-editor-header{
+.gongga-reason-editor-header{
   display:flex;align-items:flex-start;justify-content:space-between;gap:16px;
-  padding:20px 22px;border-bottom:1px solid #e7ebf3
+  padding:20px 22px;border-bottom:1px solid #e7ecf4
 }
-.gongga-editor-header h2{margin:0;font-size:20px;color:#1b2740}
-.gongga-editor-header p{margin:6px 0 0;color:#65728a;font-size:13px;line-height:1.5}
-.gongga-editor-close{
-  width:38px;height:38px;border:1px solid #dbe3f2;background:#fff;
-  border-radius:10px;cursor:pointer;font-size:20px;color:#5f6c82
+.gongga-reason-editor-header h2{
+  margin:0;font-size:20px;color:#1e2a43
 }
-.gongga-editor-body{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(300px,.75fr);min-height:0}
-.gongga-editor-form,.gongga-editor-history{padding:20px;overflow:auto}
-.gongga-editor-history{border-left:1px solid #e7ebf3;background:#fafbfd}
-.gongga-warning{
-  border:1px solid #f3c47d;background:#fff8e9;color:#7f4d0b;
-  border-radius:12px;padding:13px 14px;font-size:13px;line-height:1.55;
-  font-weight:700;margin-bottom:16px
+.gongga-reason-editor-header p{
+  margin:6px 0 0;font-size:13px;line-height:1.5;color:#6d7890
 }
-.gongga-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.gongga-field{display:grid;gap:6px;margin-bottom:12px}
-.gongga-field.full{grid-column:1/-1}
-.gongga-field label{font-size:12px;font-weight:800;color:#44516a}
-.gongga-field input,.gongga-field select,.gongga-field textarea{
-  width:100%;border:1px solid #d8e1f0;border-radius:10px;background:#fff;
-  padding:10px 11px;font:inherit;font-size:13px;color:#26334c;outline:none
+.gongga-reason-editor-close{
+  width:38px;height:38px;border:1px solid #dbe3f1;background:#fff;
+  border-radius:10px;color:#617088;font-size:20px;cursor:pointer
 }
-.gongga-field textarea{min-height:86px;resize:vertical;line-height:1.55}
-.gongga-field textarea.tall{min-height:120px}
-.gongga-field input:focus,.gongga-field select:focus,.gongga-field textarea:focus{
-  border-color:#7298eb;box-shadow:0 0 0 3px rgba(77,122,222,.12)
+.gongga-reason-editor-body{
+  display:grid;grid-template-columns:minmax(0,1.35fr) minmax(280px,.65fr);
+  min-height:0
 }
-.gongga-editor-actions{display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap;margin-top:16px}
-.gongga-editor-actions button{
-  border:0;border-radius:10px;padding:10px 14px;font-size:13px;font-weight:800;cursor:pointer
+.gongga-reason-editor-main,.gongga-reason-editor-history{
+  padding:20px;overflow:auto
 }
-.gongga-save-btn{background:#3569d4;color:#fff}
-.gongga-refresh-btn{background:#edf3ff;color:#315fc4}
-.gongga-history-list{display:grid;gap:10px}
-.gongga-history-card{border:1px solid #dfe6f2;border-radius:12px;background:#fff;padding:12px}
-.gongga-history-card.current{border-color:#6d94e8;box-shadow:inset 0 0 0 1px #6d94e8}
-.gongga-history-title{display:flex;justify-content:space-between;gap:10px;font-size:13px;font-weight:900;color:#293650}
-.gongga-history-meta{margin-top:5px;font-size:11px;line-height:1.45;color:#748097}
-.gongga-history-note{margin-top:8px;font-size:12px;line-height:1.5;color:#3f4c63;white-space:pre-wrap}
-.gongga-history-actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
-.gongga-history-actions button{
+.gongga-reason-editor-history{
+  border-left:1px solid #e7ecf4;background:#fafbfd
+}
+.gongga-reason-warning{
+  border:1px solid #efc378;background:#fff8e9;color:#7e4d0d;
+  border-radius:12px;padding:13px 14px;margin-bottom:16px;
+  font-size:13px;font-weight:700;line-height:1.55
+}
+.gongga-selected-reason{
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  border:1px solid #d9e3f4;background:#f6f9ff;border-radius:12px;
+  padding:12px 14px;margin-bottom:16px
+}
+.gongga-selected-reason span:first-child{
+  font-size:12px;color:#71809a;font-weight:800
+}
+.gongga-selected-reason strong{
+  font-size:15px;color:#274f9f
+}
+.gongga-reason-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.gongga-reason-field{display:grid;gap:6px;margin-bottom:12px}
+.gongga-reason-field.full{grid-column:1/-1}
+.gongga-reason-field label{
+  font-size:12px;font-weight:900;color:#44516a
+}
+.gongga-reason-field small{
+  font-size:11px;line-height:1.45;color:#7b879d
+}
+.gongga-reason-field input,.gongga-reason-field textarea{
+  width:100%;border:1px solid #d7e0ef;border-radius:10px;background:#fff;
+  padding:10px 11px;font:inherit;font-size:13px;color:#27344d;outline:none
+}
+.gongga-reason-field textarea{
+  min-height:96px;resize:vertical;line-height:1.55
+}
+.gongga-reason-field textarea.tall{min-height:132px}
+.gongga-reason-field input:focus,.gongga-reason-field textarea:focus{
+  border-color:#7398e9;box-shadow:0 0 0 3px rgba(73,116,214,.12)
+}
+.gongga-reason-editor-actions{
+  display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap;margin-top:16px
+}
+.gongga-reason-editor-actions button{
+  border:0;border-radius:10px;padding:10px 14px;
+  font-size:13px;font-weight:900;cursor:pointer
+}
+.gongga-reason-reload{background:#edf3ff;color:#315fc4}
+.gongga-reason-save{background:#3569d4;color:#fff}
+.gongga-reason-status{
+  margin-bottom:12px;font-size:12px;line-height:1.5;color:#6e7a92
+}
+.gongga-reason-history-list{display:grid;gap:10px}
+.gongga-reason-history-card{
+  border:1px solid #dfe6f2;border-radius:12px;background:#fff;padding:12px
+}
+.gongga-reason-history-card.current{
+  border-color:#7196e7;box-shadow:inset 0 0 0 1px #7196e7
+}
+.gongga-reason-history-title{
+  display:flex;justify-content:space-between;gap:10px;
+  font-size:13px;font-weight:900;color:#2a3750
+}
+.gongga-reason-history-meta{
+  margin-top:5px;font-size:11px;line-height:1.45;color:#77839a
+}
+.gongga-reason-history-note{
+  margin-top:8px;font-size:12px;line-height:1.5;color:#414e65;
+  white-space:pre-wrap
+}
+.gongga-reason-history-actions{
+  display:flex;gap:6px;flex-wrap:wrap;margin-top:10px
+}
+.gongga-reason-history-actions button{
   border:1px solid #d4def0;background:#f4f7fd;color:#315fc4;
-  border-radius:8px;padding:7px 9px;font-size:11px;font-weight:800;cursor:pointer
+  border-radius:8px;padding:7px 9px;font-size:11px;font-weight:900;cursor:pointer
 }
-.gongga-history-actions button.rollback{border-color:#f0be77;background:#fff7e9;color:#86510e}
-.gongga-editor-status{font-size:12px;color:#69758d;margin-bottom:12px;line-height:1.5}
-@media(max-width:860px){
-  .gongga-editor-body{grid-template-columns:1fr}
-  .gongga-editor-history{border-left:0;border-top:1px solid #e7ebf3}
-  .gongga-form-grid{grid-template-columns:1fr}
+.gongga-reason-history-actions button.rollback{
+  border-color:#efbd73;background:#fff7e8;color:#84500d
 }
-/* GONGGA SHARED EDITOR END */
+@media(max-width:820px){
+  .gongga-reason-editor-body{grid-template-columns:1fr}
+  .gongga-reason-editor-history{border-left:0;border-top:1px solid #e7ecf4}
+  .gongga-reason-form-grid{grid-template-columns:1fr}
+}
+/* GONGGA REASON EDITOR END */
 
 </style>
 <!-- POSTHOG ANALYTICS START -->
@@ -307,10 +374,7 @@ posthog.init("phc_n3YGemtqM4PuwPxJuNkYC2rYiKRJSCtd9u7vpyvWxHhK", {
       </div>
       <div class="top-actions">
         
-        <!-- GONGGA SHARED EDITOR BUTTON START -->
-<span class="guide-version-badge" id="gonggaGuideVersion">공식 기준 불러오는 중</span>
-<button class="guide-admin-btn" id="gonggaGuideEditButton" type="button">공식 기준 편집</button>
-<!-- GONGGA SHARED EDITOR BUTTON END -->
+        
 
 <a class="report-link" href="https://docs.google.com/forms/d/e/1FAIpQLSek9vMP-yh-hLQ7PJasaO4DDLLnl7oj1owXTMr9WFOjEK7GCw/viewform?usp=publish-editor" target="_blank" rel="noopener noreferrer" aria-label="오류 제보 구글폼 새 창으로 열기">
           오류 제보
@@ -1581,116 +1645,109 @@ document.getElementById("reset").addEventListener("click",()=>{
 })();
 </script>
 <!-- GONGGA CUSTOM ANALYTICS END -->
-<!-- GONGGA SHARED EDITOR MODAL START -->
-<div class="gongga-editor-overlay" id="gonggaEditorOverlay" aria-hidden="true">
-  <div class="gongga-editor-modal" role="dialog" aria-modal="true" aria-labelledby="gonggaEditorTitle">
-    <div class="gongga-editor-header">
+
+
+
+<!-- GONGGA REASON EDITOR MODAL START -->
+<div class="gongga-reason-editor-overlay" id="gonggaReasonEditorOverlay" aria-hidden="true">
+  <div class="gongga-reason-editor-modal" role="dialog" aria-modal="true" aria-labelledby="gonggaReasonEditorTitle">
+    <div class="gongga-reason-editor-header">
       <div>
-        <h2 id="gonggaEditorTitle">공식 가이드 공동 편집</h2>
-        <p>저장된 내용은 공가 안내 문구 생성기를 사용하는 모든 사람에게 적용됩니다.</p>
+        <h2 id="gonggaReasonEditorTitle">선택 사유 핵심 기준 편집</h2>
+        <p>핵심 기준과 해당 기준을 바탕으로 생성되는 안내 문구를 한 번에 수정합니다.</p>
       </div>
-      <button class="gongga-editor-close" id="gonggaEditorClose" type="button" aria-label="닫기">×</button>
+      <button class="gongga-reason-editor-close" id="gonggaReasonEditorClose" type="button" aria-label="닫기">×</button>
     </div>
-    <div class="gongga-editor-body">
-      <section class="gongga-editor-form">
-        <div class="gongga-warning">
-          쉽게 변경하지 마세요. 저장하거나 이전 버전으로 되돌리면 변경 내용이 이 페이지를 사용하는 모든 사람에게 적용됩니다. 행정 기준이 확실한 경우에만 수정해주세요.
-        </div>
-        <div class="gongga-editor-status" id="gonggaEditorStatus">최신 기준을 불러오는 중입니다.</div>
 
-        <div class="gongga-form-grid">
-          <div class="gongga-field">
-            <label for="gonggaEditorName">편집자 이름</label>
-            <input id="gonggaEditorName" maxlength="80" placeholder="예: 이주영">
+    <div class="gongga-reason-editor-body">
+      <section class="gongga-reason-editor-main">
+        <div class="gongga-reason-warning">
+          저장하면 선택한 사유의 핵심 기준과 생성 문구가 모든 사용자에게 동시에 적용됩니다. 행정 기준이 확실한 경우에만 수정해주세요.
+        </div>
+
+        <div class="gongga-selected-reason">
+          <span>현재 선택한 사유</span>
+          <strong id="gonggaEditingReasonLabel">-</strong>
+        </div>
+
+        <div class="gongga-reason-status" id="gonggaReasonEditorStatus">
+          최신 내용을 불러오는 중입니다.
+        </div>
+
+        <div class="gongga-reason-form-grid">
+          <div class="gongga-reason-field">
+            <label for="gonggaReasonEditorName">편집자 이름</label>
+            <input id="gonggaReasonEditorName" maxlength="80" placeholder="예: 이주영">
           </div>
-          <div class="gongga-field">
-            <label for="gonggaChangeNote">변경 사유</label>
-            <input id="gonggaChangeNote" maxlength="500" placeholder="예: 예비군 제출 서류 기준 변경">
+          <div class="gongga-reason-field">
+            <label for="gonggaReasonChangeNote">변경 사유</label>
+            <input id="gonggaReasonChangeNote" maxlength="500" placeholder="예: 예비군 증빙서류 기준 변경">
           </div>
-          <div class="gongga-field">
-            <label for="gonggaDeadline">제출 기한</label>
-            <input id="gonggaDeadline">
+
+          <div class="gongga-reason-field full">
+            <label for="gonggaReasonRules">선택 사유 핵심 기준</label>
+            <small>화면의 ‘선택 사유 핵심 기준’에 표시됩니다. 기준 하나당 한 줄씩 입력하세요.</small>
+            <textarea class="tall" id="gonggaReasonRules"></textarea>
           </div>
-          <div class="gongga-field">
-            <label for="gonggaReasonSelect">수정할 사유</label>
-            <select id="gonggaReasonSelect"></select>
+
+          <div class="gongga-reason-field full">
+            <label for="gonggaReasonGreeting">인사 문구</label>
+            <small>{name}을 입력하면 수강생 이름으로 치환됩니다.</small>
+            <textarea id="gonggaReasonGreeting"></textarea>
           </div>
-          <div class="gongga-field full">
-            <label for="gonggaOfficialNotice">선택 사유 핵심 기준 아래 안내</label>
-            <textarea id="gonggaOfficialNotice"></textarea>
+
+          <div class="gongga-reason-field full">
+            <label for="gonggaReasonEvidence">증빙 안내 문구</label>
+            <small>{name}, {deadline}을 사용할 수 있습니다.</small>
+            <textarea class="tall" id="gonggaReasonEvidence"></textarea>
           </div>
-          <div class="gongga-field full">
-            <label for="gonggaAdmin119">행정 119 안내</label>
-            <textarea id="gonggaAdmin119"></textarea>
-          </div>
-          <div class="gongga-field">
-            <label for="gonggaGuideLink">공가 신청 가이드 링크</label>
-            <input id="gonggaGuideLink">
-          </div>
-          <div class="gongga-field">
-            <label for="gonggaApplyLink">공가 신청 링크</label>
-            <input id="gonggaApplyLink">
-          </div>
-          <div class="gongga-field full">
-            <label for="gonggaRules">핵심 기준 목록 · 한 줄에 하나</label>
-            <textarea class="tall" id="gonggaRules"></textarea>
-          </div>
-          <div class="gongga-field full">
-            <label for="gonggaGreeting">인사 문구 · 사용 가능: {name}</label>
-            <textarea id="gonggaGreeting"></textarea>
-          </div>
-          <div class="gongga-field full">
-            <label for="gonggaEvidence">증빙 안내 · 사용 가능: {name}, {deadline}</label>
-            <textarea class="tall" id="gonggaEvidence"></textarea>
-          </div>
-          <div class="gongga-field full">
-            <label for="gonggaException">제외·예외 안내</label>
-            <textarea class="tall" id="gonggaException"></textarea>
+
+          <div class="gongga-reason-field full">
+            <label for="gonggaReasonException">제외·예외 안내 문구</label>
+            <small>공가 인정 제외 사유와 예외 기준을 입력하세요.</small>
+            <textarea class="tall" id="gonggaReasonException"></textarea>
           </div>
         </div>
 
-        <div class="gongga-editor-actions">
-          <button class="gongga-refresh-btn" id="gonggaReloadGuide" type="button">최신 내용 다시 불러오기</button>
-          <button class="gongga-save-btn" id="gonggaSaveGuide" type="button">모두에게 저장</button>
+        <div class="gongga-reason-editor-actions">
+          <button class="gongga-reason-reload" id="gonggaReasonReload" type="button">최신 내용 다시 불러오기</button>
+          <button class="gongga-reason-save" id="gonggaReasonSave" type="button">핵심 기준과 문구 함께 저장</button>
         </div>
       </section>
 
-      <aside class="gongga-editor-history">
-        <h3 style="margin:0 0 6px;font-size:16px;color:#25324a">변경 이력</h3>
-        <p style="margin:0 0 14px;color:#748097;font-size:12px;line-height:1.5">이전 내용을 불러와 검토하거나, 해당 버전으로 되돌릴 수 있습니다.</p>
-        <div class="gongga-history-list" id="gonggaHistoryList"></div>
+      <aside class="gongga-reason-editor-history">
+        <h3 style="margin:0 0 6px;font-size:16px;color:#25324a">전체 변경 이력</h3>
+        <p style="margin:0 0 14px;color:#748097;font-size:12px;line-height:1.5">
+          이전 버전을 불러오거나 전체 가이드를 해당 시점으로 되돌릴 수 있습니다.
+        </p>
+        <div class="gongga-reason-history-list" id="gonggaReasonHistoryList"></div>
       </aside>
     </div>
   </div>
 </div>
-<!-- GONGGA SHARED EDITOR MODAL END -->
+<!-- GONGGA REASON EDITOR MODAL END -->
 
-<!-- GONGGA SHARED EDITOR SCRIPT START -->
+<!-- GONGGA REASON EDITOR SCRIPT START -->
 <script>
 (() => {
   const SUPABASE_REST_URL = "https://bjeqqlnkbqwmeyunraxl.supabase.co/rest/v1";
   const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_3GQxxaBEs9j8adqqHbIziQ_MJ7Be1iJ";
-  const DEFAULT_CONFIG = {"officialNotice": "현재 선택한 사유의 핵심 기준입니다. 서류 인정 여부가 애매하거나 가이드 외 확인이 필요한 경우 행정 119에 문의해주세요.", "admin119": "공가 사유나 출결 인정 일수에 대한 추가 확인이 필요하거나, 제출 서류와 관련해 가이드 외 궁금한 점이 있다면 행정 119에 문의해주세요.", "guideLink": "https://0813daniing-lab.github.io/gongga-message-generator/", "applyLink": "https://0813daniing-lab.github.io/gongga-message-generator/", "deadline": "결석일 기준 다음 날 오후 4시 전까지", "reasons": {"medical": {"label": "병원·질병", "rules": ["병명 또는 질병코드와 방문일이 표시된 증빙서류가 필요합니다.", "진료확인서, 진단서, 처방전 등이 인정 가능한 서류입니다.", "단순 영수증이나 진료비 계산서는 인정되지 않을 수 있습니다.", "일반 건강검진, 라식·라섹, 미용 목적 진료, 병원 방문 없는 휴식은 공가 대상이 아닙니다."], "greeting": "네, {name}님. 몸이 좋지 않으시다면 무리하지 마시고 진료 잘 받고 오세요.", "evidence": "{name}님, 공가 신청 시 병명 또는 질병코드와 방문일이 표시된 진료확인서, 진단서, 처방전 등의 증빙서류를 {deadline} 제출해주세요.", "exception": "단순 영수증이나 진료비 계산서, 일반 건강검진, 라식·라섹, 미용 목적 진료, 병원에 방문하지 않은 휴식은 공가 인정 대상이 아닙니다. 만 19세 미만 자녀 진료 동반은 자녀 증빙서류와 가족관계증명서가 필요합니다."}, "reserve": {"label": "예비군·민방위", "rules": ["소집통지서가 아닌 실제 훈련필증 또는 교육필증이 필요합니다.", "훈련 날짜와 발급 확인 정보가 선명하게 표시되어야 합니다.", "실제 훈련을 이수한 날짜가 확인되어야 합니다."], "greeting": "네, {name}님. 예비군 또는 민방위 일정 확인했습니다. 훈련 조심히 다녀오세요.", "evidence": "{name}님, 소집통지서가 아닌 실제 훈련필증 또는 교육필증을 {deadline} 제출해주세요. 필증에는 훈련 날짜와 발급 확인 정보가 선명하게 표시되어야 합니다.", "exception": "소집통지서만으로는 인정되지 않으며, 실제 훈련을 이수한 날짜가 확인되어야 합니다."}, "interview": {"label": "입사 면접", "rules": ["기업 직인이 포함된 면접확인서가 필요합니다.", "담당자 또는 대표 서명만 있다면 해당 담당자의 명함도 함께 제출해야 합니다.", "직인이 없다면 면접 일정 조율 메일이나 문자를 추가로 제출해야 합니다."], "greeting": "네, {name}님. 입사 면접 일정 확인했습니다. 준비하신 만큼 잘 보고 오시길 바랍니다.", "evidence": "{name}님, 기업 직인이 포함된 면접확인서를 {deadline} 제출해주세요. 담당자 또는 대표의 서명만 있다면 해당 담당자의 명함도 함께 제출해야 합니다.", "exception": "직인이 없다면 면접 일정 조율 메일이나 문자를 추가로 제출해주세요. 서류 합격 안내문, 면접 통지서, 커피챗 자료만으로는 인정되지 않습니다."}, "exam": {"label": "자격증·채용시험", "rules": ["실제 응시 사실을 확인할 수 있는 응시확인서가 필요합니다.", "현재 훈련과정과 관련된 자격시험 또는 채용전형 필기시험만 가능합니다.", "접수확인서나 시험 안내문만으로는 인정되지 않습니다."], "greeting": "네, {name}님. 시험 일정 확인했습니다. 시험 잘 보고 오세요.", "evidence": "{name}님, 실제 응시 사실을 확인할 수 있는 응시확인서를 {deadline} 제출해주세요.", "exception": "접수확인서나 시험 안내문만으로는 인정되지 않습니다. 현재 훈련과정과 관련된 자격시험 또는 채용전형 필기시험만 가능하며, 과정과 무관한 시험이나 대학교 중간·기말고사는 공가 대상이 아닙니다."}, "bereavement": {"label": "가족 사망", "rules": ["사망진단서와 가족관계증명서가 모두 필요합니다.", "배우자와 본인·배우자의 부모는 5일, 조부모·자녀·형제자매는 3일이 기준입니다.", "사망일 기준으로 한 번 신청합니다."], "greeting": "네, {name}님. 많이 경황이 없으시겠습니다. 일정은 걱정하지 마시고 잘 다녀오세요.", "evidence": "{name}님, 사망진단서와 가족관계증명서를 모두 {deadline} 제출해주세요.", "exception": "배우자와 본인·배우자의 부모는 5일, 조부모·자녀·형제자매는 3일이 기준이며 사망일 기준으로 한 번 신청하면 됩니다. 삼촌·이모·사촌·지인 등은 공가 대상이 아닙니다."}, "marriage": {"label": "결혼·배우자 출산", "rules": ["본인 결혼은 청첩장, 자녀 결혼은 청첩장과 가족관계증명서가 필요합니다.", "배우자 출산은 출생증명서와 가족관계증명서가 필요합니다.", "본인 결혼 5일, 자녀 결혼 1일, 배우자 출산 5일이 기준입니다."], "greeting": "네, {name}님. 결혼 또는 배우자 출산 일정 확인했습니다. 중요한 날 잘 보내고 오세요.", "evidence": "{name}님, 본인 결혼은 청첩장, 자녀 결혼은 청첩장과 가족관계증명서, 배우자 출산은 출생증명서와 가족관계증명서를 {deadline} 제출해주세요.", "exception": "본인 결혼은 5일, 자녀 결혼은 1일, 배우자 출산은 5일이 기준이며 결혼일 또는 출산일 기준으로 한 번 신청하면 됩니다."}, "contest": {"label": "해커톤·경진대회", "rules": ["현재 훈련직종과 관련된 행사임을 확인할 수 있어야 합니다.", "실제 참여 사실을 확인할 수 있는 참여확인서가 필요합니다.", "단순 컨퍼런스나 세미나 참석은 공가 인정 대상이 아닙니다."], "greeting": "네, {name}님. 해커톤 또는 경진대회 일정 확인했습니다. 좋은 경험하고 안전하게 다녀오세요.", "evidence": "{name}님, 현재 훈련직종과 관련된 행사임을 확인할 수 있는 참여확인서를 {deadline} 제출해주세요.", "exception": "단순 컨퍼런스나 세미나 참석은 공가 인정 대상이 아닙니다."}, "phone": {"label": "스마트폰 분실·고장", "rules": ["공가가 아닌 출석입력요청 또는 출석정정으로 처리됩니다.", "분실신고증 또는 수리접수증과 실제 학습기록이 필요합니다.", "고장 난 휴대전화 사진만으로는 인정되지 않습니다."], "greeting": "네, {name}님. 스마트폰 문제로 많이 불편하시겠습니다. 필요한 자료를 먼저 확보해주세요.", "evidence": "{name}님, 공가가 아닌 출석입력요청 또는 출석정정으로 처리됩니다. 분실신고증 또는 수리접수증과 해당 시간의 실제 학습기록을 {deadline} 제출해주세요.", "exception": "고장 난 휴대전화 사진만으로는 인정되지 않으며, 지정된 장소에서 정상적으로 학습한 기록이 함께 확인되어야 합니다."}, "system": {"label": "시스템 오류", "rules": ["공가가 아닌 출석입력요청 또는 출석정정으로 처리됩니다.", "오류 화면 녹화본과 실제 학습기록이 필요합니다.", "개인 인터넷 환경 문제는 인정되지 않습니다."], "greeting": "네, {name}님. 출석 시스템 오류 상황 확인했습니다. 오류 화면과 발생 시간을 바로 남겨주세요.", "evidence": "{name}님, 공가가 아닌 출석입력요청 또는 출석정정으로 처리됩니다. 오류 화면 녹화본과 해당 시간의 실제 학습기록을 {deadline} 제출해주세요.", "exception": "개인 인터넷 환경 문제는 인정되지 않습니다. 오류가 발생하면 즉시 화면을 녹화하고 매니저에게 상황을 공유해주세요."}, "notAllowed": {"label": "인정 불가 사유", "rules": ["현재 공가 인정 기준에 포함되지 않은 사유입니다.", "실제 출석 시간에 따라 결석, 지각 또는 조퇴로 처리될 수 있습니다.", "정확한 처리가 필요하면 행정 119를 통해 확인해야 합니다."], "greeting": "네, {name}님. 말씀해주신 일정 확인했습니다.", "evidence": "", "exception": "해당 사유는 현재 공가 인정 기준에 포함되지 않아 공가 처리가 어렵습니다. 실제 출석 시간에 따라 결석, 지각 또는 조퇴로 처리될 수 있으니 출석 가능한 시간을 먼저 확인해주세요."}}};
 
-  let sharedConfig = JSON.parse(JSON.stringify(DEFAULT_CONFIG));
-  let sharedVersion = 1;
-  let sharedUpdatedAt = null;
-  let sharedUpdatedBy = "시스템";
-  let editorDraft = null;
-  let editorReasonKey = "medical";
+  let currentSharedConfig = null;
+  let currentSharedVersion = 1;
+  let currentUpdatedAt = null;
+  let currentUpdatedBy = "시스템";
+  let editorReasonKey = null;
   let editorOpen = false;
 
-  const overlay = document.getElementById("gonggaEditorOverlay");
-  const versionBadge = document.getElementById("gonggaGuideVersion");
-  const editButton = document.getElementById("gonggaGuideEditButton");
-  const closeButton = document.getElementById("gonggaEditorClose");
-  const reasonSelect = document.getElementById("gonggaReasonSelect");
-  const historyList = document.getElementById("gonggaHistoryList");
-  const statusText = document.getElementById("gonggaEditorStatus");
+  const overlay = document.getElementById("gonggaReasonEditorOverlay");
+  const closeButton = document.getElementById("gonggaReasonEditorClose");
+  const historyList = document.getElementById("gonggaReasonHistoryList");
+  const statusText = document.getElementById("gonggaReasonEditorStatus");
 
-  const deepClone = value => JSON.parse(JSON.stringify(value));
+  const clone = value => JSON.parse(JSON.stringify(value));
 
-  function safeEscape(value) {
+  function escapeHtml(value) {
     return String(value ?? "")
       .replaceAll("&", "&amp;")
       .replaceAll("<", "&lt;")
@@ -1704,8 +1761,8 @@ document.getElementById("reset").addEventListener("click",()=>{
     else alert(message);
   }
 
-  async function rpc(functionName, payload = {}) {
-    const response = await fetch(`${SUPABASE_REST_URL}/rpc/${functionName}`, {
+  async function rpc(name, payload = {}) {
+    const response = await fetch(`${SUPABASE_REST_URL}/rpc/${name}`, {
       method: "POST",
       headers: {
         "apikey": SUPABASE_PUBLISHABLE_KEY,
@@ -1730,42 +1787,30 @@ document.getElementById("reset").addEventListener("click",()=>{
     return data;
   }
 
-  function normalizeConfig(value) {
-    const merged = deepClone(DEFAULT_CONFIG);
-    if (!value || typeof value !== "object") return merged;
-
-    for (const key of ["officialNotice", "admin119", "guideLink", "applyLink", "deadline"]) {
-      if (typeof value[key] === "string") merged[key] = value[key];
-    }
-
-    if (value.reasons && typeof value.reasons === "object") {
-      Object.keys(merged.reasons).forEach(key => {
-        const remote = value.reasons[key];
-        if (!remote || typeof remote !== "object") return;
-
-        for (const field of ["label", "greeting", "evidence", "exception"]) {
-          if (typeof remote[field] === "string") merged.reasons[key][field] = remote[field];
-        }
-
-        if (Array.isArray(remote.rules)) {
-          merged.reasons[key].rules = remote.rules
-            .map(item => String(item).trim())
-            .filter(Boolean);
-        }
-      });
-    }
-
-    return merged;
-  }
-
-  function formatDateTime(value) {
+  function formatDate(value) {
     if (!value) return "";
     const date = new Date(value);
     if (Number.isNaN(date.getTime())) return "";
+
     return new Intl.DateTimeFormat("ko-KR", {
-      year: "numeric", month: "2-digit", day: "2-digit",
-      hour: "2-digit", minute: "2-digit"
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit"
     }).format(date);
+  }
+
+  function getReasonLabel(reasonKey) {
+    if (currentSharedConfig?.reasons?.[reasonKey]?.label) {
+      return currentSharedConfig.reasons[reasonKey].label;
+    }
+
+    if (typeof reasons !== "undefined" && reasons[reasonKey]?.label) {
+      return reasons[reasonKey].label;
+    }
+
+    return reasonKey;
   }
 
   function renderTemplate(template, values) {
@@ -1774,39 +1819,59 @@ document.getElementById("reset").addEventListener("click",()=>{
       .replaceAll("{deadline}", values.deadline || "");
   }
 
-  function applyConfigToInputs() {
+  function applySharedGlobals() {
+    if (!currentSharedConfig) return;
+
     const deadline = document.getElementById("deadline");
     const guideLink = document.getElementById("guideLink");
     const applyLink = document.getElementById("applyLink");
 
-    if (deadline) deadline.value = sharedConfig.deadline || "";
-    if (guideLink) guideLink.value = sharedConfig.guideLink || "";
-    if (applyLink) applyLink.value = sharedConfig.applyLink || "";
+    if (deadline && currentSharedConfig.deadline) deadline.value = currentSharedConfig.deadline;
+    if (guideLink && currentSharedConfig.guideLink) guideLink.value = currentSharedConfig.guideLink;
+    if (applyLink && currentSharedConfig.applyLink) applyLink.value = currentSharedConfig.applyLink;
   }
 
-  function renderSharedRule() {
+  function renderSharedRulePanel() {
     const panel = document.getElementById("rulePanel");
-    if (!panel || typeof selectedReason === "undefined" || typeof reasons === "undefined") return;
+
+    if (
+      !panel ||
+      !currentSharedConfig ||
+      typeof selectedReason === "undefined" ||
+      typeof reasons === "undefined"
+    ) return;
 
     const reasonMeta = reasons[selectedReason];
-    const sharedReason = sharedConfig.reasons[selectedReason] || DEFAULT_CONFIG.reasons[selectedReason];
+    const sharedReason = currentSharedConfig.reasons?.[selectedReason];
+
     if (!reasonMeta || !sharedReason) return;
 
     panel.innerHTML = `
-      <div class="rule-card">
-        <div class="rule-title">${safeEscape(reasonMeta.label || sharedReason.label)}</div>
-        <div class="chips">${(reasonMeta.chips || []).map(([text, color]) =>
-          `<span class="chip ${safeEscape(color)}">${safeEscape(text)}</span>`
-        ).join("")}</div>
-        <ul class="rule-list">${(sharedReason.rules || []).map(item =>
-          `<li>${safeEscape(item)}</li>`
-        ).join("")}</ul>
+      <div class="shared-rule-toolbar">
+        <div class="shared-rule-toolbar-title">선택 사유 핵심 기준</div>
+        <div class="shared-rule-toolbar-actions">
+          <span class="shared-rule-version" id="gonggaSharedVersion">v${currentSharedVersion}</span>
+          <button class="shared-rule-edit-btn" id="gonggaEditSelectedReason" type="button">
+            이 사유 기준·문구 편집
+          </button>
+        </div>
       </div>
-      <div class="notice">${safeEscape(sharedConfig.officialNotice || "")}</div>
+      <div class="rule-card">
+        <div class="rule-title">${escapeHtml(reasonMeta.label || sharedReason.label)}</div>
+        <div class="chips">
+          ${(reasonMeta.chips || []).map(([text, color]) =>
+            `<span class="chip ${escapeHtml(color)}">${escapeHtml(text)}</span>`
+          ).join("")}
+        </div>
+        <ul class="rule-list">
+          ${(sharedReason.rules || []).map(item => `<li>${escapeHtml(item)}</li>`).join("")}
+        </ul>
+      </div>
+      <div class="notice">${escapeHtml(currentSharedConfig.officialNotice || "")}</div>
     `;
   }
 
-  function getSharedScheduleParagraph() {
+  function getScheduleParagraph() {
     const schedule = typeof getScheduleInfo === "function"
       ? getScheduleInfo()
       : {startLabel: "", returnLabel: "", days: 1};
@@ -1838,8 +1903,7 @@ document.getElementById("reset").addEventListener("click",()=>{
       sentences.push(`일정은 ${dateText}${attendanceLabel} 예정으로 확인했습니다.`);
     }
 
-    const includeTeam = document.getElementById("includeTeam")?.checked;
-    if (includeTeam) {
+    if (document.getElementById("includeTeam")?.checked) {
       if (selectedWeek === "selfStudy") {
         sentences.push("현재는 자율학습 주간이므로 별도의 팀 역할 분담은 없지만, 팀원분들께 일정을 간단히 공유해주세요.");
       } else {
@@ -1861,22 +1925,35 @@ document.getElementById("reset").addEventListener("click",()=>{
   }
 
   window.buildMessage = function(name) {
-    const reason = sharedConfig.reasons[selectedReason] || DEFAULT_CONFIG.reasons[selectedReason];
-    const deadline = sharedConfig.deadline || "결석일 기준 다음 날 오후 4시 전까지";
+    if (!currentSharedConfig) {
+      return typeof window.__originalBuildMessage === "function"
+        ? window.__originalBuildMessage(name)
+        : "";
+    }
+
+    const reason = currentSharedConfig.reasons?.[selectedReason];
+    if (!reason) return "";
+
+    const deadline =
+      currentSharedConfig.deadline ||
+      document.getElementById("deadline")?.value.trim() ||
+      "결석일 기준 다음 날 오후 4시 전까지";
+
     const paragraphs = [];
 
     if (document.getElementById("includeEmpathy")?.checked && reason.greeting) {
       paragraphs.push(renderTemplate(reason.greeting, {name, deadline}));
     }
 
-    const schedule = getSharedScheduleParagraph();
-    if (schedule) paragraphs.push(schedule);
+    const scheduleParagraph = getScheduleParagraph();
+    if (scheduleParagraph) paragraphs.push(scheduleParagraph);
 
     if (reason.evidence) {
       paragraphs.push(renderTemplate(reason.evidence, {name, deadline}));
     }
 
     const finalSentences = [];
+
     if (reason.exception) finalSentences.push(reason.exception);
 
     if (typeof getMultiDayAbsenceNote === "function" && getMultiDayAbsenceNote()) {
@@ -1887,13 +1964,17 @@ document.getElementById("reset").addEventListener("click",()=>{
       finalSentences.push("당일 서류 준비가 어렵다면 신청 기한이 지나기 전에 공가 신청을 먼저 등록한 뒤 서류를 보완해주세요.");
     }
 
-    if (document.getElementById("includeAdmin")?.checked && sharedConfig.admin119) {
-      finalSentences.push(sharedConfig.admin119);
+    if (document.getElementById("includeAdmin")?.checked && currentSharedConfig.admin119) {
+      finalSentences.push(currentSharedConfig.admin119);
     }
 
     const links = [];
-    if (sharedConfig.guideLink) links.push(`공가 신청 가이드: ${sharedConfig.guideLink}`);
-    if (sharedConfig.applyLink) links.push(`공가 신청 링크: ${sharedConfig.applyLink}`);
+    if (currentSharedConfig.guideLink) {
+      links.push(`공가 신청 가이드: ${currentSharedConfig.guideLink}`);
+    }
+    if (currentSharedConfig.applyLink) {
+      links.push(`공가 신청 링크: ${currentSharedConfig.applyLink}`);
+    }
 
     const finalBody = finalSentences.join(" ");
     const finalParagraph = links.length
@@ -1908,226 +1989,289 @@ document.getElementById("reset").addEventListener("click",()=>{
   async function loadSharedConfig(showMessage = false) {
     try {
       const result = await rpc("get_gongga_shared_config");
-      sharedConfig = normalizeConfig(result?.config);
-      sharedVersion = Number(result?.version || 1);
-      sharedUpdatedAt = result?.updated_at || null;
-      sharedUpdatedBy = result?.updated_by || "시스템";
 
-      versionBadge.textContent = `공식 기준 v${sharedVersion}`;
-      versionBadge.classList.remove("error");
-      versionBadge.title = `${formatDateTime(sharedUpdatedAt)} / ${sharedUpdatedBy}`;
+      currentSharedConfig = result?.config ? clone(result.config) : null;
+      currentSharedVersion = Number(result?.version || 1);
+      currentUpdatedAt = result?.updated_at || null;
+      currentUpdatedBy = result?.updated_by || "시스템";
 
-      applyConfigToInputs();
-      renderSharedRule();
+      applySharedGlobals();
+      renderSharedRulePanel();
 
-      if (showMessage) notify("최신 공식 기준을 불러왔습니다.");
+      if (showMessage) notify("최신 기준과 생성 문구를 불러왔습니다.");
     } catch (error) {
       console.error("공유 가이드 조회 실패", error);
-      versionBadge.textContent = "공식 기준 조회 오류";
-      versionBadge.classList.add("error");
+
+      const badge = document.getElementById("gonggaSharedVersion");
+      if (badge) {
+        badge.textContent = "조회 오류";
+        badge.classList.add("error");
+      }
+
       if (showMessage) notify("공유 가이드를 불러오지 못했습니다.");
     }
   }
 
-  function syncReasonFormToDraft() {
-    if (!editorDraft) return;
-    const reason = editorDraft.reasons[editorReasonKey];
+  function loadReasonEditorFields() {
+    const reason = currentSharedConfig?.reasons?.[editorReasonKey];
     if (!reason) return;
 
-    reason.rules = document.getElementById("gonggaRules").value
-      .split("\n")
-      .map(item => item.trim())
-      .filter(Boolean);
-    reason.greeting = document.getElementById("gonggaGreeting").value;
-    reason.evidence = document.getElementById("gonggaEvidence").value;
-    reason.exception = document.getElementById("gonggaException").value;
-  }
+    document.getElementById("gonggaEditingReasonLabel").textContent =
+      getReasonLabel(editorReasonKey);
 
-  function loadReasonForm() {
-    const reason = editorDraft.reasons[editorReasonKey];
-    document.getElementById("gonggaRules").value = (reason.rules || []).join("\n");
-    document.getElementById("gonggaGreeting").value = reason.greeting || "";
-    document.getElementById("gonggaEvidence").value = reason.evidence || "";
-    document.getElementById("gonggaException").value = reason.exception || "";
-  }
+    document.getElementById("gonggaReasonRules").value =
+      (reason.rules || []).join("\n");
 
-  function loadEditorForm() {
-    editorDraft = deepClone(sharedConfig);
-    editorReasonKey = reasonSelect.value || "medical";
+    document.getElementById("gonggaReasonGreeting").value =
+      reason.greeting || "";
 
-    document.getElementById("gonggaDeadline").value = editorDraft.deadline || "";
-    document.getElementById("gonggaOfficialNotice").value = editorDraft.officialNotice || "";
-    document.getElementById("gonggaAdmin119").value = editorDraft.admin119 || "";
-    document.getElementById("gonggaGuideLink").value = editorDraft.guideLink || "";
-    document.getElementById("gonggaApplyLink").value = editorDraft.applyLink || "";
+    document.getElementById("gonggaReasonEvidence").value =
+      reason.evidence || "";
 
-    statusText.textContent = `현재 적용 버전 v${sharedVersion} · ${formatDateTime(sharedUpdatedAt)} · ${sharedUpdatedBy}`;
-    loadReasonForm();
-  }
+    document.getElementById("gonggaReasonException").value =
+      reason.exception || "";
 
-  function readGlobalEditorFields() {
-    editorDraft.deadline = document.getElementById("gonggaDeadline").value.trim();
-    editorDraft.officialNotice = document.getElementById("gonggaOfficialNotice").value.trim();
-    editorDraft.admin119 = document.getElementById("gonggaAdmin119").value.trim();
-    editorDraft.guideLink = document.getElementById("gonggaGuideLink").value.trim();
-    editorDraft.applyLink = document.getElementById("gonggaApplyLink").value.trim();
+    statusText.textContent =
+      `현재 적용 버전 v${currentSharedVersion} · ${formatDate(currentUpdatedAt)} · ${currentUpdatedBy}`;
   }
 
   async function loadHistory() {
-    historyList.innerHTML = "<div class='gongga-editor-status'>변경 이력을 불러오는 중입니다.</div>";
+    historyList.innerHTML =
+      "<div class='gongga-reason-status'>변경 이력을 불러오는 중입니다.</div>";
 
     try {
       const rows = await rpc("list_gongga_shared_config_versions", {p_limit: 30});
+
       historyList.innerHTML = (rows || []).map(item => {
-        const current = Number(item.version) === sharedVersion;
-        const actionText = item.action === "rollback"
-          ? `v${item.source_version}으로 되돌림`
-          : item.action === "initial" ? "초기 등록" : "수정";
+        const current = Number(item.version) === currentSharedVersion;
+        const actionText =
+          item.action === "rollback"
+            ? `v${item.source_version}으로 되돌림`
+            : item.action === "initial"
+              ? "초기 등록"
+              : "수정";
 
         return `
-          <div class="gongga-history-card ${current ? "current" : ""}">
-            <div class="gongga-history-title">
-              <span>v${item.version} · ${safeEscape(actionText)}</span>
+          <div class="gongga-reason-history-card ${current ? "current" : ""}">
+            <div class="gongga-reason-history-title">
+              <span>v${item.version} · ${escapeHtml(actionText)}</span>
               <span>${current ? "현재" : ""}</span>
             </div>
-            <div class="gongga-history-meta">${safeEscape(formatDateTime(item.created_at))} · ${safeEscape(item.editor_name || "익명")}</div>
-            <div class="gongga-history-note">${safeEscape(item.change_note || "변경 사유 없음")}</div>
-            <div class="gongga-history-actions">
-              <button type="button" data-preview-version="${item.version}">내용 불러오기</button>
-              ${current ? "" : `<button class="rollback" type="button" data-rollback-version="${item.version}">이 버전으로 되돌리기</button>`}
+            <div class="gongga-reason-history-meta">
+              ${escapeHtml(formatDate(item.created_at))} · ${escapeHtml(item.editor_name || "익명")}
+            </div>
+            <div class="gongga-reason-history-note">
+              ${escapeHtml(item.change_note || "변경 사유 없음")}
+            </div>
+            <div class="gongga-reason-history-actions">
+              <button type="button" data-load-version="${item.version}">이 버전 내용 확인</button>
+              ${current ? "" : `
+                <button class="rollback" type="button" data-rollback-version="${item.version}">
+                  전체 가이드를 이 버전으로 복구
+                </button>
+              `}
             </div>
           </div>
         `;
-      }).join("") || "<div class='gongga-editor-status'>변경 이력이 없습니다.</div>";
+      }).join("") ||
+        "<div class='gongga-reason-status'>변경 이력이 없습니다.</div>";
     } catch (error) {
       console.error(error);
-      historyList.innerHTML = "<div class='gongga-editor-status'>변경 이력을 불러오지 못했습니다.</div>";
+      historyList.innerHTML =
+        "<div class='gongga-reason-status'>변경 이력을 불러오지 못했습니다.</div>";
     }
   }
 
-  async function openEditor() {
+  async function openReasonEditor() {
+    if (!currentSharedConfig) {
+      await loadSharedConfig(false);
+    }
+
+    editorReasonKey =
+      typeof selectedReason !== "undefined" ? selectedReason : "medical";
+
     editorOpen = true;
     overlay.classList.add("open");
     overlay.setAttribute("aria-hidden", "false");
-    await loadSharedConfig(false);
 
-    reasonSelect.innerHTML = Object.entries(sharedConfig.reasons)
-      .map(([key, value]) => `<option value="${safeEscape(key)}">${safeEscape(value.label || key)}</option>`)
-      .join("");
-
-    reasonSelect.value = editorReasonKey;
-    loadEditorForm();
+    loadReasonEditorFields();
     await loadHistory();
   }
 
-  function closeEditor() {
+  function closeReasonEditor() {
     editorOpen = false;
     overlay.classList.remove("open");
     overlay.setAttribute("aria-hidden", "true");
   }
 
-  reasonSelect.addEventListener("change", () => {
-    syncReasonFormToDraft();
-    editorReasonKey = reasonSelect.value;
-    loadReasonForm();
-  });
+  async function saveReason() {
+    const reason = currentSharedConfig?.reasons?.[editorReasonKey];
+    if (!reason) return;
 
-  document.getElementById("gonggaSaveGuide").addEventListener("click", async () => {
-    syncReasonFormToDraft();
-    readGlobalEditorFields();
+    const updatedConfig = clone(currentSharedConfig);
 
-    const editorName = document.getElementById("gonggaEditorName").value.trim() || "익명";
-    const changeNote = document.getElementById("gonggaChangeNote").value.trim() || "변경 사유 미입력";
-    const saveButton = document.getElementById("gonggaSaveGuide");
+    updatedConfig.reasons[editorReasonKey].rules =
+      document.getElementById("gonggaReasonRules").value
+        .split("\n")
+        .map(item => item.trim())
+        .filter(Boolean);
 
-    if (!confirm("저장하면 모든 사용자에게 같은 내용이 적용됩니다. 저장할까요?")) return;
+    updatedConfig.reasons[editorReasonKey].greeting =
+      document.getElementById("gonggaReasonGreeting").value.trim();
 
+    updatedConfig.reasons[editorReasonKey].evidence =
+      document.getElementById("gonggaReasonEvidence").value.trim();
+
+    updatedConfig.reasons[editorReasonKey].exception =
+      document.getElementById("gonggaReasonException").value.trim();
+
+    const editorName =
+      document.getElementById("gonggaReasonEditorName").value.trim() || "익명";
+
+    const changeNote =
+      document.getElementById("gonggaReasonChangeNote").value.trim() ||
+      `${getReasonLabel(editorReasonKey)} 기준 및 생성 문구 수정`;
+
+    if (!confirm(
+      `${getReasonLabel(editorReasonKey)}의 핵심 기준과 생성 문구를 모든 사용자에게 함께 적용할까요?`
+    )) return;
+
+    const saveButton = document.getElementById("gonggaReasonSave");
     saveButton.disabled = true;
     saveButton.textContent = "저장 중";
 
     try {
       const result = await rpc("save_gongga_shared_config", {
-        p_config: editorDraft,
+        p_config: updatedConfig,
         p_editor_name: editorName,
         p_change_note: changeNote,
-        p_expected_version: sharedVersion
+        p_expected_version: currentSharedVersion
       });
 
-      sharedConfig = normalizeConfig(result?.config);
-      sharedVersion = Number(result?.version || sharedVersion + 1);
-      sharedUpdatedAt = result?.updated_at || new Date().toISOString();
-      sharedUpdatedBy = result?.updated_by || editorName;
+      currentSharedConfig = clone(result.config);
+      currentSharedVersion = Number(result.version);
+      currentUpdatedAt = result.updated_at;
+      currentUpdatedBy = result.updated_by;
 
-      applyConfigToInputs();
-      renderSharedRule();
-      loadEditorForm();
+      applySharedGlobals();
+      renderSharedRulePanel();
+      loadReasonEditorFields();
       await loadHistory();
-      notify(`공식 기준 v${sharedVersion}으로 저장했습니다.`);
+
+      notify(
+        `${getReasonLabel(editorReasonKey)} 핵심 기준과 생성 문구를 v${currentSharedVersion}으로 함께 저장했습니다.`
+      );
     } catch (error) {
       console.error(error);
+
       if (String(error.message).includes("version_conflict")) {
         notify("다른 사용자가 먼저 수정했습니다. 최신 내용을 다시 불러온 뒤 수정해주세요.");
         await loadSharedConfig(false);
-        loadEditorForm();
+        loadReasonEditorFields();
         await loadHistory();
       } else {
         notify("저장하지 못했습니다.");
       }
     } finally {
       saveButton.disabled = false;
-      saveButton.textContent = "모두에게 저장";
+      saveButton.textContent = "핵심 기준과 문구 함께 저장";
+    }
+  }
+
+  document.addEventListener("click", event => {
+    const editButton = event.target.closest("#gonggaEditSelectedReason");
+    if (editButton) {
+      openReasonEditor();
+      return;
     }
   });
 
-  document.getElementById("gonggaReloadGuide").addEventListener("click", async () => {
-    await loadSharedConfig(true);
-    loadEditorForm();
-    await loadHistory();
+  document.getElementById("gonggaReasonSave")
+    .addEventListener("click", saveReason);
+
+  document.getElementById("gonggaReasonReload")
+    .addEventListener("click", async () => {
+      await loadSharedConfig(true);
+      editorReasonKey =
+        typeof selectedReason !== "undefined" ? selectedReason : editorReasonKey;
+      loadReasonEditorFields();
+      await loadHistory();
+    });
+
+  closeButton.addEventListener("click", closeReasonEditor);
+
+  overlay.addEventListener("click", event => {
+    if (event.target === overlay) closeReasonEditor();
+  });
+
+  document.addEventListener("keydown", event => {
+    if (event.key === "Escape" && editorOpen) closeReasonEditor();
   });
 
   historyList.addEventListener("click", async event => {
-    const previewButton = event.target.closest("[data-preview-version]");
+    const loadButton = event.target.closest("[data-load-version]");
     const rollbackButton = event.target.closest("[data-rollback-version]");
 
-    if (previewButton) {
-      syncReasonFormToDraft();
-      const version = Number(previewButton.dataset.previewVersion);
-      const result = await rpc("get_gongga_shared_config_version", {p_version: version});
-      editorDraft = normalizeConfig(result?.config);
-      document.getElementById("gonggaDeadline").value = editorDraft.deadline || "";
-      document.getElementById("gonggaOfficialNotice").value = editorDraft.officialNotice || "";
-      document.getElementById("gonggaAdmin119").value = editorDraft.admin119 || "";
-      document.getElementById("gonggaGuideLink").value = editorDraft.guideLink || "";
-      document.getElementById("gonggaApplyLink").value = editorDraft.applyLink || "";
-      loadReasonForm();
-      statusText.textContent = `v${version} 내용을 편집창에 불러왔습니다. 저장 전까지 전체 적용되지 않습니다.`;
+    if (loadButton) {
+      const version = Number(loadButton.dataset.loadVersion);
+      const result = await rpc(
+        "get_gongga_shared_config_version",
+        {p_version: version}
+      );
+
+      const oldReason = result?.config?.reasons?.[editorReasonKey];
+
+      if (!oldReason) {
+        notify("해당 버전에서 선택 사유 내용을 찾지 못했습니다.");
+        return;
+      }
+
+      document.getElementById("gonggaReasonRules").value =
+        (oldReason.rules || []).join("\n");
+
+      document.getElementById("gonggaReasonGreeting").value =
+        oldReason.greeting || "";
+
+      document.getElementById("gonggaReasonEvidence").value =
+        oldReason.evidence || "";
+
+      document.getElementById("gonggaReasonException").value =
+        oldReason.exception || "";
+
+      statusText.textContent =
+        `v${version}의 ${getReasonLabel(editorReasonKey)} 내용을 편집창에 불러왔습니다. 저장 전까지 적용되지 않습니다.`;
+
       return;
     }
 
     if (rollbackButton) {
       const version = Number(rollbackButton.dataset.rollbackVersion);
-      const editorName = document.getElementById("gonggaEditorName").value.trim() || "익명";
+      const editorName =
+        document.getElementById("gonggaReasonEditorName").value.trim() || "익명";
 
-      if (!confirm(`v${version} 내용으로 되돌리면 모든 사용자에게 즉시 적용됩니다. 계속할까요?`)) return;
+      if (!confirm(
+        `전체 공가 가이드를 v${version} 상태로 되돌립니다. 모든 사용자에게 적용할까요?`
+      )) return;
 
       try {
         const result = await rpc("rollback_gongga_shared_config", {
           p_target_version: version,
           p_editor_name: editorName,
-          p_change_note: `v${version}으로 되돌림`,
-          p_expected_version: sharedVersion
+          p_change_note: `전체 공가 가이드를 v${version}으로 되돌림`,
+          p_expected_version: currentSharedVersion
         });
 
-        sharedConfig = normalizeConfig(result?.config);
-        sharedVersion = Number(result?.version || sharedVersion + 1);
-        sharedUpdatedAt = result?.updated_at || new Date().toISOString();
-        sharedUpdatedBy = result?.updated_by || editorName;
+        currentSharedConfig = clone(result.config);
+        currentSharedVersion = Number(result.version);
+        currentUpdatedAt = result.updated_at;
+        currentUpdatedBy = result.updated_by;
 
-        applyConfigToInputs();
-        renderSharedRule();
-        loadEditorForm();
+        applySharedGlobals();
+        renderSharedRulePanel();
+        loadReasonEditorFields();
         await loadHistory();
-        notify(`v${version} 내용을 새 버전 v${sharedVersion}으로 복구했습니다.`);
+
+        notify(`전체 공가 가이드를 새 버전 v${currentSharedVersion}으로 복구했습니다.`);
       } catch (error) {
         console.error(error);
         notify("이전 버전으로 되돌리지 못했습니다.");
@@ -2135,31 +2279,35 @@ document.getElementById("reset").addEventListener("click",()=>{
     }
   });
 
-  editButton.addEventListener("click", openEditor);
-  closeButton.addEventListener("click", closeEditor);
-  overlay.addEventListener("click", event => {
-    if (event.target === overlay) closeEditor();
-  });
-  document.addEventListener("keydown", event => {
-    if (event.key === "Escape" && editorOpen) closeEditor();
-  });
+  if (typeof window.__originalBuildMessage !== "function" && typeof buildMessage === "function") {
+    window.__originalBuildMessage = buildMessage;
+  }
 
-  const originalRenderRule = typeof renderRule === "function" ? renderRule : null;
+  const originalRenderRule =
+    typeof renderRule === "function" ? renderRule : null;
+
   if (originalRenderRule) {
-    window.renderRule = renderSharedRule;
+    window.renderRule = function() {
+      if (currentSharedConfig) renderSharedRulePanel();
+      else originalRenderRule();
+    };
   }
 
   loadSharedConfig(false);
 
   setInterval(() => {
-    if (!editorOpen && document.visibilityState === "visible") loadSharedConfig(false);
+    if (!editorOpen && document.visibilityState === "visible") {
+      loadSharedConfig(false);
+    }
   }, 30000);
 
   document.addEventListener("visibilitychange", () => {
-    if (!editorOpen && document.visibilityState === "visible") loadSharedConfig(false);
+    if (!editorOpen && document.visibilityState === "visible") {
+      loadSharedConfig(false);
+    }
   });
 })();
 </script>
-<!-- GONGGA SHARED EDITOR SCRIPT END -->
+<!-- GONGGA REASON EDITOR SCRIPT END -->
 </body>
 </html>
